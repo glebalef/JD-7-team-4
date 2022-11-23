@@ -7,3 +7,4 @@
 /dataSources/
 /dataSources.local.xml
 /sqldialects.xml
+git rm -r -f --cached
