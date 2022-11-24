@@ -13,18 +13,22 @@ public final class Keyboards {
             new String[]{"Позвать волонтера"}
     );
 
-    private final Keyboard infoKeyboard = new ReplyKeyboardMarkup(
+   // клавитура экрана инфорамации с разными вопросами о приюте
+   private final Keyboard infoKeyboard = new ReplyKeyboardMarkup(
             new String[]{"Расскзать о приюте", "График работы приюта"},
             new String[]{"Показать адрес приюта", "Как вести себя в приюте"},
             new String[]{"Поделитесь вашими данными"},
             new String[]{"Позвать волонтера"}
     );
 
-    private final InlineKeyboardMarkup showOnMap = new InlineKeyboardMarkup(
+    // клавитура со ссылками на карты ('схема маршрута')
+   private final InlineKeyboardMarkup showOnMap = new InlineKeyboardMarkup(
             new InlineKeyboardButton("Google-карты").url("https://goo.gl/maps/Eb8FvemYc7RyCAnG6"),
             new InlineKeyboardButton("Яндекс-карты").url("https://yandex.ru/maps/-/CCUfBUVkCC"));
 
 
+
+    // Getters
     public Keyboard getInitialKeyboard() {
         return initialKeyboard;
     }
