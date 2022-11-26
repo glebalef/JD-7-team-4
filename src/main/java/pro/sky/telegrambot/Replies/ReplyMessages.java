@@ -1,6 +1,7 @@
 package pro.sky.telegrambot.Replies;
 
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.request.ForwardMessage;
 import com.pengrad.telegrambot.request.SendMessage;
 import pro.sky.telegrambot.Models.Shelter;
 
@@ -31,5 +32,21 @@ public final class ReplyMessages {
 
     public SendMessage rulesInfoMessage(Update update) {
         return new SendMessage(update.message().chat().id(), shelter.getRules());
+    }
+
+    // фраза на нажатие кнопки "Позвать оператора"
+    public SendMessage feedBack(Update update) {
+        return new SendMessage(update.message().chat().id(), "Ожидайте ответа оператора");
+    }
+
+    // Пересылает сообщение в чат волонтеров (Id чата: -1001634691308L)
+    public ForwardMessage anotherQuestionMessage(Update update) {
+        return new ForwardMessage(-1001634691308L, update.message().chat().id(), update.message().messageId());
+    }
+
+    // Возвращает ответ из чата волонтеров пользователю в бот
+    public SendMessage replyMessage(Update update) {
+        return new SendMessage(update.message().replyToMessage().forwardFrom().id(), update.message().text());
+
     }
 }
