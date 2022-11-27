@@ -1,0 +1,3 @@
+databaseChangeLog:
+  - include:
+      file: liquibase/dog_shelter_table.sql
