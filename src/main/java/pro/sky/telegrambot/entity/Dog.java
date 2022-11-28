@@ -1,9 +1,8 @@
 package pro.sky.telegrambot.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import pro.sky.telegrambot.Models.Person;
+
+import javax.persistence.*;
 
 @Entity
 public class Dog {
@@ -14,6 +13,9 @@ public class Dog {
     private String name;
     private int age;
     private String breed;
+
+    @OneToOne(mappedBy = "dog")
+    private Person person;
 
     public Dog(String name, int age, String breed) {
         this.name = name;
@@ -54,5 +56,9 @@ public class Dog {
 
     public void setBreed(String breed) {
         this.breed = breed;
+    }
+
+    public Person getPerson() {
+        return person;
     }
 }

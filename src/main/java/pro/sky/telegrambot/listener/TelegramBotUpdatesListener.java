@@ -6,11 +6,15 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.response.SendResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pro.sky.telegrambot.Models.Person;
 import pro.sky.telegrambot.Models.Shelter;
 import pro.sky.telegrambot.Replies.Keyboards;
 import pro.sky.telegrambot.Replies.ReplyMessages;
-import java.util.Objects;
+import pro.sky.telegrambot.repository.PersonRepository;
+import pro.sky.telegrambot.service.PersonService;
+
 import javax.annotation.PostConstruct;
 import java.util.List;
 
@@ -18,16 +22,22 @@ import java.util.List;
 @Service
 public class TelegramBotUpdatesListener implements UpdatesListener {
 
-    private Logger logger = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
+    private final Logger logger = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
 
-  @Autowired
+    @Autowired
     private TelegramBot telegramBot;
-    
+
     // Все сервис-классы, которые мы используем
 
     Shelter shelter = new Shelter();
     Keyboards keyboards = new Keyboards();
     ReplyMessages replyMessages = new ReplyMessages();
+    private final PersonRepository personRepository;
+
+    public TelegramBotUpdatesListener(TelegramBot telegramBot, PersonRepository personRepository) {
+        this.telegramBot = telegramBot;
+        this.personRepository = personRepository;
+    }
 
     @PostConstruct
     public void init() {
@@ -45,6 +55,16 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                     // для кнопки /start
                     case "/start":
                     case "Вернуться в меню":
+
+                        //Запись нового пользователя в базу
+                        Person newPerson = new Person();
+
+                        if (personRepository.findByChatId(update.message().chat().id()).isEmpty()) {
+                            newPerson.setFirstName(update.message().chat().firstName());
+                            newPerson.setLastName(update.message().chat().lastName());
+                            newPerson.setChatId(update.message().chat().id());
+                            personRepository.save(newPerson);
+                        }
 
                         SendResponse responseInitial = telegramBot
                                 .execute(replyMessages.initialMessage(update)
@@ -92,6 +112,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         break;
 
                     default:
+
                         // ТОТ САМЫЙ КУСОК КОДА ДЛЯ ПЕРЕСЫЛКИ СООБЩЕНИЙ ВОЛОНТЕРАМ КОТОРЫЙ
                         // НУЖНО АКТИВИРОВАТЬ ТОЛЬКО ПОСЛЕ НАЖАТИЯ "Позвать волонтера"
 
