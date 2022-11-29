@@ -5,15 +5,22 @@ import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.model.request.Keyboard;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 
+/**
+ * класс для хранения раздичных видов клавиатур, используемых при ответах бота
+ */
 public final class Keyboards {
 
-    // Клавиатура для начального экрана - после сообщения /start
+    /**
+     * Начальная клавитаура после /start
+     */
     private final Keyboard initialKeyboard = new ReplyKeyboardMarkup(
             new String[]{"Узнать о приюте", "Как взять собаку из приюта?", "Прислать отчет о питомце"},
             new String[]{"Позвать волонтера"}
     );
 
-    // клавитура экрана инфорамации с разными вопросами о приюте
+    /**
+     * клавиатура с запросами информации о приюте (константы ид класса Shelter)
+     */
     private final Keyboard infoKeyboard = new ReplyKeyboardMarkup(
             new String[]{"Расскзать о приюте", "График работы приюта"},
             new String[]{"Показать адрес приюта", "Как вести себя в приюте"},
@@ -21,17 +28,21 @@ public final class Keyboards {
             new String[]{"Позвать волонтера"}
     );
 
-    // клавитура со ссылками на карты ('схема маршрута')
+    /**
+     * клавиатура с ссылками на карты Гугл и Яндекс
+     */
     private final InlineKeyboardMarkup showOnMap = new InlineKeyboardMarkup(
             new InlineKeyboardButton("Google-карты").url("https://goo.gl/maps/Eb8FvemYc7RyCAnG6"),
             new InlineKeyboardButton("Яндекс-карты").url("https://yandex.ru/maps/-/CCUfBUVkCC"));
 
 
-    // клавитура с кнопкой возврата из меню "Позвать волонтера"
+    /**
+     * клавиатура с кнопкой "Вернуться в меню"
+     */
     private final Keyboard feedBack = new ReplyKeyboardMarkup(
             "Вернуться в меню");
 
-    // Getters
+    // Геттеры для клавиатур
     public Keyboard getInitialKeyboard() {
         return initialKeyboard;
     }

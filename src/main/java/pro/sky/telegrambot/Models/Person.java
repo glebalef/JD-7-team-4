@@ -1,7 +1,5 @@
 package pro.sky.telegrambot.Models;
 
-import pro.sky.telegrambot.entity.Dog;
-
 import javax.persistence.*;
 import java.util.Objects;
 

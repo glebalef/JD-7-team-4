@@ -1,4 +1,4 @@
-package pro.sky.telegrambot.entity;
+package pro.sky.telegrambot.Models;
 
 import pro.sky.telegrambot.Models.Person;
 
