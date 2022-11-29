@@ -12,8 +12,7 @@ import pro.sky.telegrambot.Models.Person;
 import pro.sky.telegrambot.Models.Shelter;
 import pro.sky.telegrambot.Replies.Keyboards;
 import pro.sky.telegrambot.Replies.ReplyMessages;
-import pro.sky.telegrambot.repository.PersonRepository;
-import pro.sky.telegrambot.service.PersonService;
+import pro.sky.telegrambot.Repository.PersonRepository;
 
 import javax.annotation.PostConstruct;
 import java.util.List;

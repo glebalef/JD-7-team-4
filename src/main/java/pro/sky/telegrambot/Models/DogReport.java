@@ -9,6 +9,10 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+
+/**
+ * класс для отчетов о собаках
+ */
 @Entity
 @Table(name = "dog_reports")
 public class DogReport {
@@ -53,6 +57,11 @@ public class DogReport {
     public DogReport(String diet, String generalCondition) {
         this.diet = diet;
         this.generalCondition = generalCondition;
+    }
+
+
+    public DogReport() {
+
     }
 
     public Long getId() {

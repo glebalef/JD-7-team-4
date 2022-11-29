@@ -2,9 +2,8 @@ package pro.sky.telegrambot.service;
 
 import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.Models.Person;
-import pro.sky.telegrambot.repository.PersonRepository;
+import pro.sky.telegrambot.Repository.PersonRepository;
 
-import java.util.Collection;
 import java.util.Optional;
 
 @Service

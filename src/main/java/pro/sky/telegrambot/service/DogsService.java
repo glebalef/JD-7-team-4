@@ -1,7 +1,7 @@
 package pro.sky.telegrambot.service;
 
-import pro.sky.telegrambot.entity.Dog;
-import pro.sky.telegrambot.repository.DogsRepository;
+import pro.sky.telegrambot.Models.Dog;
+import pro.sky.telegrambot.Repository.DogsRepository;
 
 import java.util.Optional;
 
