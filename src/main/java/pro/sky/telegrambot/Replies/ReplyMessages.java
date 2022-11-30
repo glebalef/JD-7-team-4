@@ -34,17 +34,33 @@ public final class ReplyMessages {
         return new SendMessage(update.message().chat().id(), shelter.getRules());
     }
 
-    // фраза на нажатие кнопки "Позвать оператора"
+    /**
+     * присылает фразу "Ожидайте ответа оператора" при выборе пункта "Позвать оператора"
+     *
+     * @param update- данные о сообщении пользователя из TelegramBotUpdateListener
+     * @return возвращает строку "Ожидайте ответа оператора"
+     */
     public SendMessage feedBack(Update update) {
         return new SendMessage(update.message().chat().id(), "Ожидайте ответа оператора");
     }
 
-    // Пересылает сообщение в чат волонтеров (Id чата: -1001634691308L)
+    /**
+     * Пересылает сообщение в чат волонтеров (Id чата: -1001634691308L)
+     *
+     * @param update - данные о сообщении пользователя из TelegramBotUpdateListener
+     * @return возвращает идентификатор сообщения, которое необходимо переслать в чат поддержки
+     */
     public ForwardMessage anotherQuestionMessage(Update update) {
         return new ForwardMessage(-1001634691308L, update.message().chat().id(), update.message().messageId());
     }
 
-    // Возвращает ответ из чата волонтеров пользователю в бот
+    /**
+     * Возвращает ответ из чата волонтеров пользователю в бот
+     *
+     * @param update- данные о сообщении пользователя из TelegramBotUpdateListener
+     * @return возвращает строку сообщения из чата поддержки
+     */
+
     public SendMessage replyMessage(Update update) {
         return new SendMessage(update.message().replyToMessage().forwardFrom().id(), update.message().text());
 

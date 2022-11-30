@@ -3,21 +3,45 @@ package pro.sky.telegrambot.Models;
 import javax.persistence.*;
 import java.util.Objects;
 
+/**
+ * Класс пользователя telegram ботом
+ *
+ * @author Евгений Фисенко
+ */
 @Entity
 public class Person {
+
+    /**
+     * поле генерируемого идентификатора при записи пользователя в базу
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Integer id;
 
+    /**
+     * поле уникального идентификатора пользователя в приложении telegram (присваивается автоматически)
+     */
     private Long chatId;
 
+    /**
+     * поле - имя пользователя (передается приложением telegram)
+     */
     private String firstName;
 
+    /**
+     * поле - фамилия пользователя (передается приложением telegram)
+     */
     private String lastName;
 
+    /**
+     * поле - номер телефона пользователя (передается пользователем)
+     */
     private String phone;
-
+    /**
+     * поле - идентификатор собаки для таблицы person(присваивается волонтером в случае усыновления животного)
+     * связь с таблицей dog
+     */
     @OneToOne
     @JoinColumn(name = "dog_id")
     private Dog dog;
