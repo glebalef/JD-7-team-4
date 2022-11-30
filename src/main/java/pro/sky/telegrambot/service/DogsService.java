@@ -26,6 +26,7 @@ private final DogsRepository dogsRepository;
 
     /**
      * Метод поиска собаки по ее идентификатору в БД.
+     * <br>
      * Используется метод репозитория {@link org.springframework.data.jpa.repository.JpaRepository#findById(Object)}
      * @param id идентификатор искомой собаки
      * @return найденная собака
