@@ -6,13 +6,13 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.response.SendResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.model.Person;
 import pro.sky.telegrambot.constant.Shelter;
 import pro.sky.telegrambot.reply.Keyboards;
 import pro.sky.telegrambot.reply.ReplyMessages;
 import pro.sky.telegrambot.repository.PersonRepository;
+import pro.sky.telegrambot.service.PersonService;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -23,7 +23,6 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
 
     private final Logger logger = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
 
-    @Autowired
     private TelegramBot telegramBot;
 
     // Все сервис-классы, которые мы используем
@@ -32,10 +31,13 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     Keyboards keyboards = new Keyboards();
     ReplyMessages replyMessages = new ReplyMessages();
     private final PersonRepository personRepository;
+    private final PersonService personService;
 
-    public TelegramBotUpdatesListener(TelegramBot telegramBot, PersonRepository personRepository) {
+    public TelegramBotUpdatesListener(TelegramBot telegramBot,
+                                      PersonRepository personRepository, PersonService personService) {
         this.telegramBot = telegramBot;
         this.personRepository = personRepository;
+        this.personService = personService;
     }
 
     @PostConstruct
@@ -58,7 +60,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         //Запись нового пользователя в базу
                         Person newPerson = new Person();
 
-                        if (personRepository.findByChatId(update.message().chat().id()).isEmpty()) {
+                        if (personService.getPersonByChatId(update) == null) {
                             newPerson.setFirstName(update.message().chat().firstName());
                             newPerson.setLastName(update.message().chat().lastName());
                             newPerson.setChatId(update.message().chat().id());
