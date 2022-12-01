@@ -1,7 +1,7 @@
-package pro.sky.telegrambot.Repository;
+package pro.sky.telegrambot.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import pro.sky.telegrambot.Models.Person;
+import pro.sky.telegrambot.model.Person;
 
 import java.util.Collection;
 

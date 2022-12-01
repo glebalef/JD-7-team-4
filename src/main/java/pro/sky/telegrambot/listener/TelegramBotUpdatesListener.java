@@ -8,11 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pro.sky.telegrambot.Models.Person;
-import pro.sky.telegrambot.Models.Shelter;
-import pro.sky.telegrambot.Replies.Keyboards;
-import pro.sky.telegrambot.Replies.ReplyMessages;
-import pro.sky.telegrambot.Repository.PersonRepository;
+import pro.sky.telegrambot.model.Person;
+import pro.sky.telegrambot.constant.Shelter;
+import pro.sky.telegrambot.reply.Keyboards;
+import pro.sky.telegrambot.reply.ReplyMessages;
+import pro.sky.telegrambot.repository.PersonRepository;
 
 import javax.annotation.PostConstruct;
 import java.util.List;

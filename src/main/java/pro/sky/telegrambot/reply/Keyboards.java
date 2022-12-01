@@ -1,4 +1,4 @@
-package pro.sky.telegrambot.Replies;
+package pro.sky.telegrambot.reply;
 
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;

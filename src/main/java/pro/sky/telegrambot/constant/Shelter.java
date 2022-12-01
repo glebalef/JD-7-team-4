@@ -1,4 +1,4 @@
-package pro.sky.telegrambot.Models;
+package pro.sky.telegrambot.constant;
 
 
 import com.pengrad.telegrambot.model.File;
