@@ -8,11 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pro.sky.telegrambot.Models.Shelter;
-import pro.sky.telegrambot.Replies.Keyboards;
-import pro.sky.telegrambot.Replies.ReplyMessages;
-import pro.sky.telegrambot.Repository.PersonRepository;
-import pro.sky.telegrambot.service.PersonService;
+import pro.sky.telegrambot.model.Person;
+import pro.sky.telegrambot.constant.Shelter;
+import pro.sky.telegrambot.reply.Keyboards;
+import pro.sky.telegrambot.reply.ReplyMessages;
+import pro.sky.telegrambot.repository.PersonRepository;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -32,12 +32,10 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     Keyboards keyboards = new Keyboards();
     ReplyMessages replyMessages = new ReplyMessages();
     private final PersonRepository personRepository;
-    private final PersonService personService;
 
-    public TelegramBotUpdatesListener(TelegramBot telegramBot, PersonRepository personRepository, PersonService personService) {
+    public TelegramBotUpdatesListener(TelegramBot telegramBot, PersonRepository personRepository) {
         this.telegramBot = telegramBot;
         this.personRepository = personRepository;
-        this.personService = personService;
     }
 
     @PostConstruct
@@ -57,9 +55,15 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                     case "/start":
                     case "Вернуться в меню":
 
-                        //  запись пользователя в базу данных в таблицу person
+                        //Запись нового пользователя в базу
+                        Person newPerson = new Person();
 
-                        personService.getPersonByChatId(update);
+                        if (personRepository.findByChatId(update.message().chat().id()).isEmpty()) {
+                            newPerson.setFirstName(update.message().chat().firstName());
+                            newPerson.setLastName(update.message().chat().lastName());
+                            newPerson.setChatId(update.message().chat().id());
+                            personRepository.save(newPerson);
+                        }
 
                         SendResponse responseInitial = telegramBot
                                 .execute(replyMessages.initialMessage(update)
@@ -96,15 +100,12 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
 
 
                     case "Позвать волонтера":
-                        //показывает кнопку меню "Возврат в меню"
-
+                        // показывает кнопку "Вернуться в меню"
                         SendResponse feedBack = telegramBot
                                 .execute(replyMessages.feedBack(update)
                                         .replyMarkup(keyboards.getFeedBack()));
 
                         // Пересылает запрос "Позвать волонтера" в чат волонтеров
-
-
                         SendResponse callForFeedBack = telegramBot
                                 .execute(replyMessages.anotherQuestionMessage(update));
                         break;
@@ -113,13 +114,11 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
 
                         // ТОТ САМЫЙ КУСОК КОДА ДЛЯ ПЕРЕСЫЛКИ СООБЩЕНИЙ ВОЛОНТЕРАМ КОТОРЫЙ
                         // НУЖНО АКТИВИРОВАТЬ ТОЛЬКО ПОСЛЕ НАЖАТИЯ "Позвать волонтера"
-                        //не могу его туда запихать
 
                         SendResponse sendToFeedBack = telegramBot
                                 .execute(replyMessages.anotherQuestionMessage(update));
 
-                        // Принимает ответ от волонтера для пользователя в бот
-
+                        // Принимает ответ от волонтера для пользователя
                         SendResponse reply = telegramBot
                                 .execute(replyMessages.replyMessage(update));
                 }

@@ -1,9 +1,5 @@
-package pro.sky.telegrambot.Models;
+package pro.sky.telegrambot.model;
 
-
-import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.response.SendResponse;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

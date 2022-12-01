@@ -1,9 +1,9 @@
-package pro.sky.telegrambot.Replies;
+package pro.sky.telegrambot.reply;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.ForwardMessage;
 import com.pengrad.telegrambot.request.SendMessage;
-import pro.sky.telegrambot.Models.Shelter;
+import pro.sky.telegrambot.constant.Shelter;
 
 public final class ReplyMessages {
 

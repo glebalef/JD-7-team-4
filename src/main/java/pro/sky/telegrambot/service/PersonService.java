@@ -2,8 +2,8 @@ package pro.sky.telegrambot.service;
 
 import com.pengrad.telegrambot.model.Update;
 import org.springframework.stereotype.Service;
-import pro.sky.telegrambot.Models.Person;
-import pro.sky.telegrambot.Repository.PersonRepository;
+import pro.sky.telegrambot.model.Person;
+import pro.sky.telegrambot.repository.PersonRepository;
 
 /**
  * сервис-класс для работы с сущностью Person

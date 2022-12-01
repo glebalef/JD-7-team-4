@@ -1,6 +1,4 @@
-package pro.sky.telegrambot.Models;
-
-import pro.sky.telegrambot.Models.Person;
+package pro.sky.telegrambot.model;
 
 import javax.persistence.*;
 

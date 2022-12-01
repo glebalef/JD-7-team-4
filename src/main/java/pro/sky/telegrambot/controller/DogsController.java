@@ -1,11 +1,11 @@
-package pro.sky.telegrambot.Controllers;
+package pro.sky.telegrambot.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pro.sky.telegrambot.Models.Dog;
+import pro.sky.telegrambot.model.Dog;
 import pro.sky.telegrambot.service.DogsService;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
