@@ -16,3 +16,20 @@ ALTER table person add column last_name text;
 -- changeset EvgenyF:3
 Alter table person drop column name;
 
+
+--changeset Gleb:4
+CREATE TABLE dog_report
+(
+    id                     BIGINT primary key,
+    dog                    dog,
+    phone                  TEXT,
+    diet                   TEXT,
+    condition              TEXT,
+    oldhabits              BOOLEAN,
+    newhabits              BOOLEAN
+
+);
+
+--changeset Gleb:5
+ALTER TABLE dog_report ADD COLUMN report_date timestamp;
+
