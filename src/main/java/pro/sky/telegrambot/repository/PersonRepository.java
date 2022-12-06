@@ -11,4 +11,5 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
      * @return возвращает пользователя
      */
     Person findByChatId(Long id);
+
 }

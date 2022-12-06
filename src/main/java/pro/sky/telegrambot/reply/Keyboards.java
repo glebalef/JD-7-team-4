@@ -1,9 +1,7 @@
 package pro.sky.telegrambot.reply;
 
-import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
-import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
-import com.pengrad.telegrambot.model.request.Keyboard;
-import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
+import com.pengrad.telegrambot.model.request.*;
+
 
 /**
  * класс для хранения раздичных видов клавиатур, используемых при ответах бота
@@ -24,7 +22,7 @@ public final class Keyboards {
     private final Keyboard infoKeyboard = new ReplyKeyboardMarkup(
             new String[]{"Расскзать о приюте", "График работы приюта"},
             new String[]{"Показать адрес приюта", "Как вести себя в приюте"},
-            new String[]{"Поделитесь вашими данными"},
+            new String[]{"Поделитесь контактными данными"},
             new String[]{"Позвать волонтера"}
     );
 
@@ -39,10 +37,22 @@ public final class Keyboards {
     /**
      * клавиатура с кнопкой "Вернуться в меню"
      */
-    private final Keyboard feedBack = new ReplyKeyboardMarkup(
+    private final Keyboard backToMenu = new ReplyKeyboardMarkup(
             "Вернуться в меню");
 
+
+
+
+    public Keyboard getAutoReply() {
+        return new ForceReply();
+    }
+
+
+
+
     // Геттеры для клавиатур
+
+
     public Keyboard getInitialKeyboard() {
         return initialKeyboard;
     }
@@ -55,8 +65,8 @@ public final class Keyboards {
         return showOnMap;
     }
 
-    public Keyboard getFeedBack() {
-        return feedBack;
+    public Keyboard getBackToMenu() {
+        return backToMenu;
     }
 }
 
