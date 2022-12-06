@@ -1,5 +1,7 @@
 package pro.sky.telegrambot.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -43,7 +45,6 @@ public class Person {
      * связь с таблицей dog
      */
     @OneToOne
-    @JoinColumn(name = "dog_id")
     private Dog dog;
 
 

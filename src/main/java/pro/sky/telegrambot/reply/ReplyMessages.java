@@ -18,6 +18,17 @@ public final class ReplyMessages {
         return new SendMessage(update.message().chat().id(), "Какую иформацию Вы хотели бы узнать?");
     }
 
+    public SendMessage reportRequest(Update update) {
+        return new SendMessage(update.message().chat().id(), "Направьте, пожалуйста, отчет о Вашем питомце в сообщении ниже:");
+    }
+
+    public SendMessage noDogResponse(Update update) {
+        return new SendMessage(update.message().chat().id(), "Чтобы отправить отчет, у Вас должен быть питомец!");
+    }
+    public SendMessage reportIsSaved(Update update) {
+        return new SendMessage(update.message().chat().id(), "Спасибо! Ваш отчет успешно сохранен.");
+    }
+
     public SendMessage generalInfoMessage(Update update) {
         return new SendMessage(update.message().chat().id(), shelter.getInfo());
     }
