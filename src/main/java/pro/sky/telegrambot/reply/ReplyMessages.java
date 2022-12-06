@@ -19,7 +19,7 @@ public final class ReplyMessages {
     }
 
     public SendMessage generalInfoMessage(Update update) {
-        return new SendMessage(update.message().chat().id(), "shelter.getInfo()");
+        return new SendMessage(update.message().chat().id(), shelter.getInfo());
     }
 
     public SendMessage schedualInfoMessage(Update update) {
@@ -32,6 +32,9 @@ public final class ReplyMessages {
 
     public SendMessage rulesInfoMessage(Update update) {
         return new SendMessage(update.message().chat().id(), shelter.getRules());
+    }
+    public SendMessage phone(Update update) {
+        return new SendMessage(update.message().chat().id(), "Введите номер телефона для связи");
     }
 
     /**
@@ -53,6 +56,11 @@ public final class ReplyMessages {
     public ForwardMessage anotherQuestionMessage(Update update) {
         return new ForwardMessage(-1001634691308L, update.message().chat().id(), update.message().messageId());
     }
+    public SendMessage chat(Update update) {
+        return new SendMessage(-1001634691308L, "пользователь хочет задать вопрос");}
+
+    public SendMessage forward(Update update) {
+        return new SendMessage(-1001634691308L, update.message().text());}
 
     /**
      * Возвращает ответ из чата волонтеров пользователю в бот
