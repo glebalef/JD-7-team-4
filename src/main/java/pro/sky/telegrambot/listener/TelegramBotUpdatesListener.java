@@ -125,6 +125,8 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
             } catch (NullPointerException ignored) {
             }
 
+
+            // метод для проверки поступающего отчета и его сохранения в базу данных
           try {
               if (update.message().replyToMessage().text().equals("Направьте, пожалуйста, отчет о Вашем питомце в сообщении ниже:")) {
                 if (personRepository.findByChatId(update.message().chat().id()).getDog() == null) {
