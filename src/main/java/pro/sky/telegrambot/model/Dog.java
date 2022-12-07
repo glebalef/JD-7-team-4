@@ -18,7 +18,8 @@ public class Dog {
    @JsonIgnore
     private Person person;
 
-    public Dog(String name, int age, String breed) {
+    public Dog(Long id, String name, int age, String breed) {
+        this.id = id;
         this.name = name;
         this.age = age;
         this.breed = breed;
