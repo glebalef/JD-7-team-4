@@ -3,7 +3,6 @@ package pro.sky.telegrambot.model;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 
 /**
@@ -37,9 +36,16 @@ public class DogReport {
     @Column(name = "report_date")
     private LocalDateTime reportDateTime;
 
-    public DogReport() {
+    public void setFileId(String fileId) {
+        this.fileId = fileId;
     }
 
+    @Column(name = "file_Id")
+    private String fileId;
+
+    public DogReport() {
+
+    }
 
     public Long getId() {
         return id;
@@ -97,13 +103,18 @@ public class DogReport {
         this.reportDateTime = reportDateTime;
     }
 
-    public DogReport(Dog dog, String diet, String generalCondition, Boolean newHabitsAppear, Boolean oldHabitsRefuse, LocalDateTime reportDateTime) {
+    public String getFileId() {
+        return fileId;
+    }
+
+    public DogReport(Dog dog, String diet, String generalCondition, Boolean newHabitsAppear, Boolean oldHabitsRefuse, LocalDateTime reportDateTime, String fileId) {
         this.dog = dog;
         this.diet = diet;
         this.generalCondition = generalCondition;
         this.newHabitsAppear = newHabitsAppear;
         this.oldHabitsRefuse = oldHabitsRefuse;
         this.reportDateTime = reportDateTime;
+        this.fileId = fileId;
 
 
     }

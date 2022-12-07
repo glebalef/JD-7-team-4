@@ -1,6 +1,7 @@
 package pro.sky.telegrambot.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import pro.sky.telegrambot.model.DogReport;
 import pro.sky.telegrambot.model.Person;
 
 public interface PersonRepository extends JpaRepository<Person, Long> {

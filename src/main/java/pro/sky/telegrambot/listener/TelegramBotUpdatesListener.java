@@ -116,7 +116,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                     telegramBot.execute(replyMessages.anotherQuestionMessage(update));
                 }
                 // Принимает ответ от волонтера для пользователя
-                //если волонтер отвечает на пересланное сообщение из бота от пользователя
+                //если волонтер отвечает на пересланное соlобщение из бота от пользователя
                 if (update.message().replyToMessage().chat().id().equals(update.message().chat().id())) {
                     telegramBot.execute(replyMessages.replyMessage(update)
                             .replyMarkup(keyboards.getAutoReply()));
@@ -127,25 +127,35 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
 
 
             // метод для проверки поступающего отчета и его сохранения в базу данных
-          try {
-              if (update.message().replyToMessage().text().equals("Направьте, пожалуйста, отчет о Вашем питомце в сообщении ниже:")) {
-                if (personRepository.findByChatId(update.message().chat().id()).getDog() == null) {
-                    telegramBot.execute(replyMessages.noDogResponse(update));
-                } else {
-                    DogReport dogReport = new DogReport(
-                            personRepository.findByChatId(update.message().chat().id()).getDog(),
-                            "кушает", update.message().text(),
-                            Boolean.TRUE,
-                            Boolean.TRUE,
-                            Instant.ofEpochSecond(update.message().date()).atZone(ZoneId.systemDefault()).toLocalDateTime());
-                    reportRepository.save(dogReport);
+            try {
+                if (update.message().replyToMessage().text().equals("Направьте, пожалуйста, отчет о Вашем питомце в сообщении ниже:")) {
+                    if (personRepository.findByChatId(update.message().chat().id()).getDog() == null) {
+                        telegramBot.execute(replyMessages.noDogResponse(update));
+                    } else {
+                        DogReport dogReport = new DogReport(
+                                personRepository.findByChatId(update.message().chat().id()).getDog(),
+                                "кушает",
+                                update.message().text(),
+                                Boolean.TRUE,
+                                Boolean.TRUE,
+                                Instant.ofEpochSecond(update.message().date()).atZone(ZoneId.systemDefault()).toLocalDateTime(),
+                                "файл пока не прислали");
+                        reportRepository.save(dogReport);
+                        telegramBot.execute(replyMessages.photoRequest(update).replyMarkup(keyboards.getAutoReply()));
+                    }
+                }
+            } catch (NullPointerException ignored) {}
+
+            try {
+                if (update.message().replyToMessage().text().equals("Спасибо! Теперь направьте, пожалуйста, фотограию Вашего питомца, чтобы мы убедились, что с ним все хорошо!")) {
+                   DogReport dogReport = reportRepository.findDogReportByFileIdAndDogId("файл пока не прислали",personRepository.findByChatId(update.message().chat().id()).getDog().getId());
+                   dogReport.setFileId(update.message().photo()[0].fileId());
+                   reportRepository.save(dogReport);
                     telegramBot.execute(replyMessages.reportIsSaved(update));
                 }
-            }
-        } catch (NullPointerException ignored) {
-
-          }
+            } catch (NullPointerException ignored) {}
         });
+
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
 }

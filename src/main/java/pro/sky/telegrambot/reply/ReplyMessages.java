@@ -3,7 +3,9 @@ package pro.sky.telegrambot.reply;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.ForwardMessage;
 import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.request.SendPhoto;
 import pro.sky.telegrambot.constant.Shelter;
+import pro.sky.telegrambot.model.DogReport;
 
 public final class ReplyMessages {
 
@@ -25,8 +27,13 @@ public final class ReplyMessages {
     public SendMessage noDogResponse(Update update) {
         return new SendMessage(update.message().chat().id(), "Чтобы отправить отчет, у Вас должен быть питомец!");
     }
+
     public SendMessage reportIsSaved(Update update) {
         return new SendMessage(update.message().chat().id(), "Спасибо! Ваш отчет успешно сохранен.");
+    }
+
+    public SendMessage photoRequest(Update update) {
+        return new SendMessage(update.message().chat().id(), "Спасибо! Теперь направьте, пожалуйста, фотограию Вашего питомца, чтобы мы убедились, что с ним все хорошо!");
     }
 
     public SendMessage generalInfoMessage(Update update) {
@@ -44,6 +51,7 @@ public final class ReplyMessages {
     public SendMessage rulesInfoMessage(Update update) {
         return new SendMessage(update.message().chat().id(), shelter.getRules());
     }
+
     public SendMessage phone(Update update) {
         return new SendMessage(update.message().chat().id(), "Введите номер телефона для связи");
     }
@@ -67,11 +75,14 @@ public final class ReplyMessages {
     public ForwardMessage anotherQuestionMessage(Update update) {
         return new ForwardMessage(-1001634691308L, update.message().chat().id(), update.message().messageId());
     }
+
     public SendMessage chat(Update update) {
-        return new SendMessage(-1001634691308L, "пользователь хочет задать вопрос");}
+        return new SendMessage(-1001634691308L, "пользователь хочет задать вопрос");
+    }
 
     public SendMessage forward(Update update) {
-        return new SendMessage(-1001634691308L, update.message().text());}
+        return new SendMessage(-1001634691308L, update.message().text());
+    }
 
     /**
      * Возвращает ответ из чата волонтеров пользователю в бот
@@ -82,6 +93,14 @@ public final class ReplyMessages {
 
     public SendMessage replyMessage(Update update) {
         return new SendMessage(update.message().replyToMessage().forwardFrom().id(), update.message().text());
-
     }
+
+    public SendPhoto testPhoto(Update update, String fileID) {
+        return new SendPhoto(update.message().chat().id(), fileID);
+    }
+
+
+    public SendMessage testReplyToShelterStaff(Update update, DogReport dogReport) {
+        return new SendMessage(update.message().chat().id(), "Получен отчет от "+dogReport.getDog().getPerson().getFirstName()+" "+dogReport.getDog().getPerson().getLastName()+dogReport.toString());}
 }
+

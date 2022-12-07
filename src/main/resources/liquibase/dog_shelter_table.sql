@@ -33,3 +33,6 @@ Alter table person drop column name;
 -- --changeset Gleb:5
 -- ALTER TABLE dog_report ADD COLUMN report_date timestamp;
 
+-- changeset Gleb:6
+ALTER TABLE dog_report ADD COLUMN file_Id TEXT;
+
