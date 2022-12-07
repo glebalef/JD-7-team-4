@@ -6,11 +6,16 @@ import com.pengrad.telegrambot.model.Update;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import pro.sky.telegrambot.model.DogReport;
 import pro.sky.telegrambot.reply.Keyboards;
 import pro.sky.telegrambot.reply.ReplyMessages;
+import pro.sky.telegrambot.repository.PersonRepository;
+import pro.sky.telegrambot.repository.ReportRepository;
 import pro.sky.telegrambot.service.PersonService;
 
 import javax.annotation.PostConstruct;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.List;
 
 @Service
@@ -22,10 +27,15 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     Keyboards keyboards = new Keyboards();
     ReplyMessages replyMessages = new ReplyMessages();
     private final PersonService personService;
+    private final PersonRepository personRepository;
+    private final ReportRepository reportRepository;
 
-    public TelegramBotUpdatesListener(TelegramBot telegramBot, PersonService personService) {
+
+    public TelegramBotUpdatesListener(TelegramBot telegramBot, PersonService personService, PersonRepository personRepository, ReportRepository reportRepository) {
         this.telegramBot = telegramBot;
         this.personService = personService;
+        this.personRepository = personRepository;
+        this.reportRepository = reportRepository;
     }
 
     @PostConstruct
@@ -86,6 +96,10 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         telegramBot.execute(replyMessages.phone(update)
                                 .replyMarkup(keyboards.getAutoReply()));
                         break;
+
+                    case "Прислать отчет о питомце":
+                        telegramBot.execute(replyMessages.reportRequest(update)
+                                .replyMarkup(keyboards.getAutoReply()));
                 }
 
                 // запрос номера телефона у пользователя
@@ -110,6 +124,27 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
 
             } catch (NullPointerException ignored) {
             }
+
+
+            // метод для проверки поступающего отчета и его сохранения в базу данных
+          try {
+              if (update.message().replyToMessage().text().equals("Направьте, пожалуйста, отчет о Вашем питомце в сообщении ниже:")) {
+                if (personRepository.findByChatId(update.message().chat().id()).getDog() == null) {
+                    telegramBot.execute(replyMessages.noDogResponse(update));
+                } else {
+                    DogReport dogReport = new DogReport(
+                            personRepository.findByChatId(update.message().chat().id()).getDog(),
+                            "кушает", update.message().text(),
+                            Boolean.TRUE,
+                            Boolean.TRUE,
+                            Instant.ofEpochSecond(update.message().date()).atZone(ZoneId.systemDefault()).toLocalDateTime());
+                    reportRepository.save(dogReport);
+                    telegramBot.execute(replyMessages.reportIsSaved(update));
+                }
+            }
+        } catch (NullPointerException ignored) {
+
+          }
         });
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }

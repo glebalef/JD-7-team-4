@@ -1,5 +1,7 @@
 package pro.sky.telegrambot.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -12,7 +14,8 @@ public class Dog {
     private int age;
     private String breed;
 
-    @OneToOne(mappedBy = "dog")
+   @OneToOne
+   @JsonIgnore
     private Person person;
 
     public Dog(String name, int age, String breed) {

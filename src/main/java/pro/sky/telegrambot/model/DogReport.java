@@ -38,8 +38,8 @@ public class DogReport {
     private LocalDateTime reportDateTime;
 
     public DogReport() {
-
     }
+
 
     public Long getId() {
         return id;
