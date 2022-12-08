@@ -3,9 +3,11 @@ package pro.sky.telegrambot.listener;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.request.SendMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import pro.sky.telegrambot.exception.WrongPhoneNumberException;
 import pro.sky.telegrambot.model.DogReport;
 import pro.sky.telegrambot.reply.Keyboards;
 import pro.sky.telegrambot.reply.ReplyMessages;
@@ -46,7 +48,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     @Override
     public int process(List<Update> updates) {
         updates.forEach(update -> {
-            logger.info("Processing update: {}", update);
+            //logger.info("Processing update: {}", update);
 
             // Process your updates here
 
@@ -123,28 +125,33 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 }
 
             } catch (NullPointerException ignored) {
+            } catch (WrongPhoneNumberException e) {
+                SendMessage msg = new SendMessage(update.message().chat().id()
+                        , "Допускаются только цифры и следующие символы: \" + \" , \" - \" , \"( )\".  Попробуйте снова, выбрав в меню \"Поделитесь вашими данными\".")
+                        .replyMarkup(keyboards.getInitialKeyboard());
+                telegramBot.execute(msg);
             }
 
 
             // метод для проверки поступающего отчета и его сохранения в базу данных
-          try {
-              if (update.message().replyToMessage().text().equals("Направьте, пожалуйста, отчет о Вашем питомце в сообщении ниже:")) {
-                if (personRepository.findByChatId(update.message().chat().id()).getDog() == null) {
-                    telegramBot.execute(replyMessages.noDogResponse(update));
-                } else {
-                    DogReport dogReport = new DogReport(
-                            personRepository.findByChatId(update.message().chat().id()).getDog(),
-                            "кушает", update.message().text(),
-                            Boolean.TRUE,
-                            Boolean.TRUE,
-                            Instant.ofEpochSecond(update.message().date()).atZone(ZoneId.systemDefault()).toLocalDateTime());
-                    reportRepository.save(dogReport);
-                    telegramBot.execute(replyMessages.reportIsSaved(update));
+            try {
+                if (update.message().replyToMessage().text().equals("Направьте, пожалуйста, отчет о Вашем питомце в сообщении ниже:")) {
+                    if (personRepository.findByChatId(update.message().chat().id()).getDog() == null) {
+                        telegramBot.execute(replyMessages.noDogResponse(update));
+                    } else {
+                        DogReport dogReport = new DogReport(
+                                personRepository.findByChatId(update.message().chat().id()).getDog(),
+                                "кушает", update.message().text(),
+                                Boolean.TRUE,
+                                Boolean.TRUE,
+                                Instant.ofEpochSecond(update.message().date()).atZone(ZoneId.systemDefault()).toLocalDateTime());
+                        reportRepository.save(dogReport);
+                        telegramBot.execute(replyMessages.reportIsSaved(update));
+                    }
                 }
-            }
-        } catch (NullPointerException ignored) {
+            } catch (NullPointerException ignored) {
 
-          }
+            }
         });
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }

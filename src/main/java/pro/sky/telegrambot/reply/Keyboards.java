@@ -34,24 +34,12 @@ public final class Keyboards {
             new InlineKeyboardButton("Яндекс-карты").url("https://yandex.ru/maps/-/CCUfBUVkCC"));
 
 
-    /**
-     * клавиатура с кнопкой "Вернуться в меню"
-     */
-    private final Keyboard backToMenu = new ReplyKeyboardMarkup(
-            "Вернуться в меню");
 
-
-
+    // Геттеры для клавиатур
 
     public Keyboard getAutoReply() {
         return new ForceReply();
     }
-
-
-
-
-    // Геттеры для клавиатур
-
 
     public Keyboard getInitialKeyboard() {
         return initialKeyboard;
@@ -65,9 +53,6 @@ public final class Keyboards {
         return showOnMap;
     }
 
-    public Keyboard getBackToMenu() {
-        return backToMenu;
-    }
 }
 
 
