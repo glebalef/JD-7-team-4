@@ -96,7 +96,7 @@ public final class ReplyMessages {
     }
 
     public SendPhoto testPhoto(Update update, String fileID) {
-        return new SendPhoto(update.message().chat().id(), fileID);
+        return new SendPhoto(update.message().chat().id(), "AgACAgIAAxkBAAIMWGOQsKPAIMfhITU_Y3YKYuNCBin_AAKexjEbWlyJSPT-7ersGjpRAQADAgADcwADKwQ");
     }
 
 

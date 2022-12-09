@@ -120,6 +120,9 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 if (update.message().replyToMessage().chat().id().equals(update.message().chat().id())) {
                     telegramBot.execute(replyMessages.replyMessage(update)
                             .replyMarkup(keyboards.getAutoReply()));
+
+
+
                 }
 
             } catch (NullPointerException ignored) {
