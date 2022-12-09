@@ -25,6 +25,7 @@ public final class ReplyMessages {
     public SendMessage noDogResponse(Update update) {
         return new SendMessage(update.message().chat().id(), "Чтобы отправить отчет, у Вас должен быть питомец!");
     }
+
     public SendMessage reportIsSaved(Update update) {
         return new SendMessage(update.message().chat().id(), "Спасибо! Ваш отчет успешно сохранен.");
     }
@@ -44,6 +45,7 @@ public final class ReplyMessages {
     public SendMessage rulesInfoMessage(Update update) {
         return new SendMessage(update.message().chat().id(), shelter.getRules());
     }
+
     public SendMessage phone(Update update) {
         return new SendMessage(update.message().chat().id(), "Введите номер телефона для связи");
     }
@@ -67,11 +69,14 @@ public final class ReplyMessages {
     public ForwardMessage anotherQuestionMessage(Update update) {
         return new ForwardMessage(-1001634691308L, update.message().chat().id(), update.message().messageId());
     }
+
     public SendMessage chat(Update update) {
-        return new SendMessage(-1001634691308L, "пользователь хочет задать вопрос");}
+        return new SendMessage(-1001634691308L, "пользователь хочет задать вопрос");
+    }
 
     public SendMessage forward(Update update) {
-        return new SendMessage(-1001634691308L, update.message().text());}
+        return new SendMessage(-1001634691308L, update.message().text());
+    }
 
     /**
      * Возвращает ответ из чата волонтеров пользователю в бот
@@ -83,5 +88,9 @@ public final class ReplyMessages {
     public SendMessage replyMessage(Update update) {
         return new SendMessage(update.message().replyToMessage().forwardFrom().id(), update.message().text());
 
+    }
+
+    public SendMessage photoRequest(Update update) {
+        return new SendMessage(update.message().chat().id(), "Спасибо! Теперь направьте, пожалуйста, фотограию Вашего питомца, чтобы мы убедились, что с ним все хорошо!");
     }
 }

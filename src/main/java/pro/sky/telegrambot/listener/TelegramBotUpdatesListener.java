@@ -141,17 +141,27 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                     } else {
                         DogReport dogReport = new DogReport(
                                 personRepository.findByChatId(update.message().chat().id()).getDog(),
-                                "кушает", update.message().text(),
+                                "кушает",
+                                update.message().text(),
                                 Boolean.TRUE,
                                 Boolean.TRUE,
-                                Instant.ofEpochSecond(update.message().date()).atZone(ZoneId.systemDefault()).toLocalDateTime());
+                                Instant.ofEpochSecond(update.message().date()).atZone(ZoneId.systemDefault()).toLocalDateTime(),
+                                "файл пока не прислали");
                         reportRepository.save(dogReport);
-                        telegramBot.execute(replyMessages.reportIsSaved(update));
+                        telegramBot.execute(replyMessages.photoRequest(update).replyMarkup(keyboards.getAutoReply()));
                     }
                 }
-            } catch (NullPointerException ignored) {
+            } catch (NullPointerException ignored) {}
 
-            }
+            try {
+                if (update.message().replyToMessage().text().equals("Спасибо! Теперь направьте, пожалуйста, фотограию Вашего питомца, чтобы мы убедились, что с ним все хорошо!")) {
+                    DogReport dogReport = reportRepository.findDogReportByFileIdAndDogId("файл пока не прислали",personRepository.findByChatId(update.message().chat().id()).getDog().getId());
+                    dogReport.setFileId(update.message().photo()[0].fileId());
+                    reportRepository.save(dogReport);
+                    telegramBot.execute(replyMessages.reportIsSaved(update));
+                }
+            } catch (NullPointerException ignored) {}
+
         });
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
