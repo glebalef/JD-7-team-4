@@ -6,4 +6,6 @@ import pro.sky.telegrambot.model.DogReport;
 
 @Repository
 public interface ReportRepository extends JpaRepository<DogReport,Long> {
+
+    public DogReport findDogReportByFileIdAndDogId (String fileId, Long personId);
 }

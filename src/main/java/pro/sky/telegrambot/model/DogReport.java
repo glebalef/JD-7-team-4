@@ -37,6 +37,17 @@ public class DogReport {
     @Column(name = "report_date")
     private LocalDateTime reportDateTime;
 
+    @Column (name = "file_id")
+    private String fileId;
+
+    public String getFileId() {
+        return fileId;
+    }
+
+    public void setFileId(String fileId) {
+        this.fileId = fileId;
+    }
+
     public DogReport() {
     }
 
@@ -97,13 +108,14 @@ public class DogReport {
         this.reportDateTime = reportDateTime;
     }
 
-    public DogReport(Dog dog, String diet, String generalCondition, Boolean newHabitsAppear, Boolean oldHabitsRefuse, LocalDateTime reportDateTime) {
+    public DogReport(Dog dog, String diet, String generalCondition, Boolean newHabitsAppear, Boolean oldHabitsRefuse, LocalDateTime reportDateTime, String fileId) {
         this.dog = dog;
         this.diet = diet;
         this.generalCondition = generalCondition;
         this.newHabitsAppear = newHabitsAppear;
         this.oldHabitsRefuse = oldHabitsRefuse;
         this.reportDateTime = reportDateTime;
+        this.fileId = fileId;
 
 
     }
