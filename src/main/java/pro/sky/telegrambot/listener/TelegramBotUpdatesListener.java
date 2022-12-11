@@ -7,6 +7,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import pro.sky.telegrambot.constant.Commands;
 import pro.sky.telegrambot.exception.WrongPhoneNumberException;
 import pro.sky.telegrambot.model.DogReport;
 import pro.sky.telegrambot.reply.Keyboards;
@@ -33,6 +34,8 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     private final ReportRepository reportRepository;
 
 
+
+
     public TelegramBotUpdatesListener(TelegramBot telegramBot, PersonService personService, PersonRepository personRepository, ReportRepository reportRepository) {
         this.telegramBot = telegramBot;
         this.personService = personService;
@@ -50,10 +53,12 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
         updates.forEach(update -> {
             logger.info("Processing update: {}", update);
 
-            // Process your updates here
+            String message = update.message().text();
 
+
+            // Process your updates here
             try {
-                switch (update.message().text()) {
+                switch (message) {
                     // для кнопки /start
                     case "/start":
                         //Запись нового пользователя в базу
@@ -158,6 +163,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                     DogReport dogReport = reportRepository.findDogReportByFileIdAndDogId("файл пока не прислали",personRepository.findByChatId(update.message().chat().id()).getDog().getId());
                     dogReport.setFileId(update.message().photo()[0].fileId());
                     reportRepository.save(dogReport);
+
                     telegramBot.execute(replyMessages.reportIsSaved(update));
                 }
             } catch (NullPointerException ignored) {}
