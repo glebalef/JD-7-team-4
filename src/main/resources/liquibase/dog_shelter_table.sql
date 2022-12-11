@@ -17,19 +17,27 @@ ALTER table person add column last_name text;
 Alter table person drop column name;
 
 
--- --changeset Gleb:4
--- CREATE TABLE dog_report
--- (
---     id                     BIGSERIAL primary key,
---     dog                    dog,
---     phone                  TEXT,
---     diet                   TEXT,
---     condition              TEXT,
---     oldhabits              BOOLEAN,
---     newhabits              BOOLEAN
---
--- );
---
--- --changeset Gleb:5
--- ALTER TABLE dog_report ADD COLUMN report_date timestamp;
+-- changeset Gleb:4
+CREATE TABLE dog_report
+(
+     id                     BIGSERIAL primary key,
+     diet                   TEXT,
+     condition              TEXT,
+     newhabits              BOOLEAN,
+     oldhabits              BOOLEAN,
+     report_date            timestamp,
+     dog_id                 BIGSERIAL,
+     file_id                TEXT
+);
 
+-- changeset Gleb:5
+CREATE TABLE dog (
+    id BIGSERIAL primary key,
+    age INTEGER,
+    breed VARCHAR,
+    name VARCHAR,
+    person_id INTEGER
+);
+
+-- changeset Gleb:6
+DROP TABLE dog CASCADE;

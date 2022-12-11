@@ -19,7 +19,7 @@ public class DogReport {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "dog")
+    @JoinColumn(name = "dog_id")
     private Dog dog;
 
     @Column(name = "diet")
