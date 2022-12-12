@@ -18,19 +18,15 @@ public class Person {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Integer id;
-
     /**
      * поле уникального идентификатора пользователя в приложении telegram (присваивается автоматически)
      */
     private Long chatId;
-
     /**
      * поле - имя пользователя (передается приложением telegram)
      */
     private String firstName;
-
     /**
      * поле - фамилия пользователя (передается приложением telegram)
      */
@@ -46,8 +42,6 @@ public class Person {
      */
     @OneToOne
     private Dog dog;
-
-
     public Person() {
 
     }

@@ -26,7 +26,7 @@ CREATE TABLE dog_report
      newhabits              BOOLEAN,
      oldhabits              BOOLEAN,
      report_date            timestamp,
-     dog_id                 BIGSERIAL,
+     dog_id                 BIGSERIAL references dog (id),
      file_id                TEXT
 );
 
@@ -36,8 +36,9 @@ CREATE TABLE dog (
     age INTEGER,
     breed VARCHAR,
     name VARCHAR,
-    person_id INTEGER
+    person_id INTEGER REFERENCES person (id)
 );
 
 -- changeset Gleb:6
 DROP TABLE dog CASCADE;
+
