@@ -19,7 +19,7 @@ public final class ReplyMessages {
     }
 
     public SendMessage reportRequest(Update update) {
-        return new SendMessage(update.message().chat().id(), "Направьте, пожалуйста, отчет о Вашем питомце в сообщении ниже:");
+        return new SendMessage(update.message().chat().id(), "Направьте, пожалуйста, отчет о Вашем питоце в сообщении ниже:");
     }
 
     public SendMessage noDogResponse(Update update) {
@@ -92,5 +92,21 @@ public final class ReplyMessages {
 
     public SendMessage photoRequest(Update update) {
         return new SendMessage(update.message().chat().id(), "Спасибо! Теперь направьте, пожалуйста, фотограию Вашего питомца, чтобы мы убедились, что с ним все хорошо!");
+    }
+
+    public SendMessage dietRequest(Update update) {
+        return new SendMessage(update.message().chat().id(), "Опишите, пожалуйста, чем Вы кормите Вашего питомца:");
+    }
+
+    public SendMessage oldHabitsRequest(Update update) {
+        return new SendMessage(update.message().chat().id(), "Расскажите, пропали ли у Вашего питомца приютские привычки?");
+    }
+
+    public SendMessage newhabitsRequest(Update update) {
+        return new SendMessage(update.message().chat().id(), "А теперь расскажите, ведет ли себя питомец как-то по-новому?");
+    }
+
+    public SendMessage persistantPhotoRequest(Update update) {
+        return new SendMessage(update.message().chat().id(), "Пожалуйста, направьте, фото! Нам надо взглянуть на Вашего зверька.");
     }
 }

@@ -114,6 +114,39 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                     case REPORT_REQUEST:
                         telegramBot.execute(replyMessages.reportRequest(update)
                                 .replyMarkup(keyboards.getAutoReply()));
+                        break;
+
+                    case OLD_HABITS_NEGATIVE:
+                        DogReport dogReport1 = reportRepository.findDogReportByFileIdAndDogId(null, personRepository.findByChatId(update.message().chat().id()).getDog().getId());
+                        dogReport1.setOldHabitsRefuse(Boolean.FALSE);
+                        reportRepository.save(dogReport1);
+                        telegramBot.execute(replyMessages.newhabitsRequest(update).replyMarkup(keyboards.getNewHabits()));
+                        break;
+
+                    case OLD_HABITS_POSITIVE:
+                        DogReport dogReport2 = reportRepository.findDogReportByFileIdAndDogId(null, personRepository.findByChatId(update.message().chat().id()).getDog().getId());
+                        dogReport2.setOldHabitsRefuse(Boolean.TRUE);
+                        reportRepository.save(dogReport2);
+                        telegramBot.execute(replyMessages.newhabitsRequest(update).replyMarkup(keyboards.getNewHabits()));
+                        break;
+
+                    case NEW_HABITS_POSITIVE:
+                        DogReport dogReport3 = reportRepository.findDogReportByFileIdAndDogId(null, personRepository.findByChatId(update.message().chat().id()).getDog().getId());
+                        dogReport3.setNewHabitsAppear(Boolean.TRUE);
+                        reportRepository.save(dogReport3);
+                        telegramBot.execute(replyMessages.photoRequest(update).replyMarkup(keyboards.getAutoReply()));
+                        break;
+
+                    case NEW_HABITS_NEGATIVE:
+                        DogReport dogReport4 = reportRepository.findDogReportByFileIdAndDogId(null, personRepository.findByChatId(update.message().chat().id()).getDog().getId());
+                        dogReport4.setNewHabitsAppear(Boolean.FALSE);
+                        reportRepository.save(dogReport4);
+                        telegramBot.execute(replyMessages.photoRequest(update).replyMarkup(keyboards.getAutoReply()));
+                        break;
+
+                    case PERSISTENT_PHOTO_REQUEST:
+                        telegramBot.execute(replyMessages.photoRequest(update).replyMarkup(keyboards.getAutoReply()));
+                        break;
                 }
 
                 // запрос номера телефона у пользователя
@@ -121,7 +154,6 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         .contains("Введите номер телефона для связи")) {
                     personService.phoneNumberAdd(update);
                 }
-
                 //ответ пользователя волонтеру в чат волонтеров
                 //если сообщение прислано ботом с id (5713161862L) из чата волонтеров
                 if (update.message().replyToMessage().from().id().equals(5713161862L)
@@ -144,38 +176,47 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 telegramBot.execute(msg);
             }
 
-
-            // метод для проверки поступающего отчета и его сохранения в базу данных
             try {
-                if (update.message().replyToMessage().text().equals("Направьте, пожалуйста, отчет о Вашем питомце в сообщении ниже:")) {
-                    if (personRepository.findByChatId(update.message().chat().id()).getDog() == null) {
-                        telegramBot.execute(replyMessages.noDogResponse(update));
-                    } else {
-                        DogReport dogReport = new DogReport(
-                                personRepository.findByChatId(update.message().chat().id()).getDog(),
-                                "кушает",
-                                update.message().text(),
-                                Boolean.TRUE,
-                                Boolean.TRUE,
-                                Instant.ofEpochSecond(update.message().date()).atZone(ZoneId.systemDefault()).toLocalDateTime(),
-                                "файл пока не прислали");
+                switch (Objects.requireNonNull(parse(update.message().replyToMessage().text()))){
+                    case REPLY_REPORT_REQUEST:
+                        if (personRepository.findByChatId(update.message().chat().id()).getDog() == null) {
+                            telegramBot.execute(replyMessages.noDogResponse(update));
+                        } else {
+                            DogReport dogReport = new DogReport(
+                                    personRepository.findByChatId(update.message().chat().id()).getDog(),
+                                    null,
+                                    update.message().text(),
+                                    null,
+                                    null,
+                                    Instant.ofEpochSecond(update.message().date()).atZone(ZoneId.systemDefault()).toLocalDateTime(),
+                                    null);
+                            reportRepository.save(dogReport);
+                            telegramBot.execute(replyMessages.dietRequest(update).replyMarkup(keyboards.getAutoReply()));
+                        }
+                        break;
+
+                    case DESCRIBE_DIET:
+                        DogReport dogReport = reportRepository.findDogReportByFileIdAndDogId(null, personRepository.findByChatId(update.message().chat().id()).getDog().getId());
+                        dogReport.setDiet(update.message().text());
                         reportRepository.save(dogReport);
-                        telegramBot.execute(replyMessages.photoRequest(update).replyMarkup(keyboards.getAutoReply()));
-                    }
+                        telegramBot.execute(replyMessages.oldHabitsRequest(update).replyMarkup(keyboards.getOldHabits()));
+                        break;
+
+                    case INITIAL_PHOTO_REQUEST:
+                    case PERSISTENT_PHOTO_REQUEST:
+                        if (update.message().photo() == null) {
+                            telegramBot.execute(replyMessages.persistantPhotoRequest(update).replyMarkup(keyboards.getAutoReply()));
+                        } else {
+                            DogReport dogReport3 = reportRepository.findDogReportByFileIdAndDogId(null, personRepository.findByChatId(update.message().chat().id()).getDog().getId());
+                            dogReport3.setFileId(update.message().photo()[0].fileId());
+                            reportRepository.save(dogReport3);
+                            telegramBot.execute(replyMessages.reportIsSaved(update).replyMarkup(keyboards.getInfoKeyboard()));
+                        }
+                        break;
                 }
-            } catch (NullPointerException ignored) {}
-
-            try {
-                if (update.message().replyToMessage().text().equals("Спасибо! Теперь направьте, пожалуйста, фотограию Вашего питомца, чтобы мы убедились, что с ним все хорошо!")) {
-                    DogReport dogReport = reportRepository.findDogReportByFileIdAndDogId("файл пока не прислали",personRepository.findByChatId(update.message().chat().id()).getDog().getId());
-                    dogReport.setFileId(update.message().photo()[0].fileId());
-                    reportRepository.save(dogReport);
-
-                    telegramBot.execute(replyMessages.reportIsSaved(update));
-                }
-            } catch (NullPointerException ignored) {}
-
+            } catch (NullPointerException ignored) {} logger.info("поймал NPE");
         });
+
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
 }
