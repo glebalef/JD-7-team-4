@@ -26,6 +26,16 @@ public final class Keyboards {
             new String[]{"Позвать волонтера"}
     );
 
+    private final Keyboard oldHabits = new ReplyKeyboardMarkup(
+            new String[] {"Старые привычки пока остались :("},
+            new String[] {"Питомец освоился, старых привычек нет! :)"}
+    );
+
+    private final Keyboard newHabits = new ReplyKeyboardMarkup(
+            new String[] {"Пока никаких новых привычек не приобретено..."},
+            new String[] {"Поведение поменялось - много новых привычек!"}
+    );
+
     /**
      * клавиатура с ссылками на карты Гугл и Яндекс
      */
@@ -53,6 +63,13 @@ public final class Keyboards {
         return showOnMap;
     }
 
+    public Keyboard getOldHabits() {
+        return oldHabits;
+    }
+
+    public Keyboard getNewHabits() {
+        return newHabits;
+    }
 }
 
 
