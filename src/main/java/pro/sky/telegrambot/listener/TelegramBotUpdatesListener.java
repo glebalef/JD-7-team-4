@@ -6,8 +6,10 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.constant.Commands;
+import pro.sky.telegrambot.constant.Shelter;
 import pro.sky.telegrambot.exception.WrongPhoneNumberException;
 import pro.sky.telegrambot.model.DogReport;
 import pro.sky.telegrambot.reply.Keyboards;
@@ -20,6 +22,7 @@ import javax.annotation.PostConstruct;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class TelegramBotUpdatesListener implements UpdatesListener {
@@ -48,19 +51,24 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
         telegramBot.setUpdatesListener(this);
     }
 
+    @Nullable
+    public Commands parse (String command) {
+        Commands[] values = Commands.values();
+        for (Commands c : values) {
+            if (c.getMessage().equals(command)) {
+                return c;
+            }
+        } return null;
+    }
     @Override
     public int process(List<Update> updates) {
         updates.forEach(update -> {
             logger.info("Processing update: {}", update);
-
-            String message = update.message().text();
-
-
             // Process your updates here
             try {
-                switch (message) {
+                switch (Objects.requireNonNull(parse(update.message().text()))) {
                     // для кнопки /start
-                    case "/start":
+                    case START:
                         //Запись нового пользователя в базу
                         personService.getPersonByChatId(update);
                         // начальное меню
@@ -69,42 +77,41 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         break;
 
                     //  пункт 1. Информация о приюте
-                    case "Узнать о приюте":
+                    case SHELTER_MENU:
                         telegramBot.execute(replyMessages.infoMessage(update)
                                 .replyMarkup(keyboards.getInfoKeyboard()));
                         break;
 
-                    case "Расскзать о приюте":
+                    case SHELTER_INFO:
                         telegramBot.execute(replyMessages.generalInfoMessage(update));
                         break;
 
-                    case "График работы приюта":
+                    case SHELTER_SCHEDULE:
                         telegramBot.execute(replyMessages.schedualInfoMessage(update));
                         break;
 
-                    case "Показать адрес приюта":
+                    case SHELTER_ADDRESS:
                         telegramBot.execute(replyMessages.adressInfoMessage(update)
                                 .replyMarkup(keyboards.getShowOnMap()));
                         break;
 
-                    case "Как вести себя в приюте":
+                    case SHELTER_RULES:
                         telegramBot.execute(replyMessages.rulesInfoMessage(update));
                         break;
 
-
-                    case "Позвать волонтера":
+                    case CALL_STAFF:
                         // показывает кнопку "Вернуться в меню"
                         telegramBot.execute(replyMessages.feedBack(update));
                         // Пересылает запрос "Позвать волонтера" в чат волонтеров
                         telegramBot.execute(replyMessages.anotherQuestionMessage(update));
                         break;
 
-                    case "Поделитесь контактными данными":
+                    case TEL_REQUEST:
                         telegramBot.execute(replyMessages.phone(update)
                                 .replyMarkup(keyboards.getAutoReply()));
                         break;
 
-                    case "Прислать отчет о питомце":
+                    case REPORT_REQUEST:
                         telegramBot.execute(replyMessages.reportRequest(update)
                                 .replyMarkup(keyboards.getAutoReply()));
                 }
