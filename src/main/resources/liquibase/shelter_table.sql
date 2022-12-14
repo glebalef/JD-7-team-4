@@ -41,3 +41,12 @@ CREATE TABLE dog (
 
 -- changeset Gleb:6
 DROP TABLE dog CASCADE;
+
+-- changeset EvgeniyL:7
+CREATE TABLE cat (
+    id          BIGSERIAL primary key,
+    age         INTEGER,
+    breed       VARCHAR,
+    name        VARCHAR,
+    person_id   INTEGER
+);
