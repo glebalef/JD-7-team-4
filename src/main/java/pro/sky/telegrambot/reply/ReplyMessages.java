@@ -188,7 +188,7 @@ public final class ReplyMessages {
     }
 
     public SendMessage photoRequest(Update update) {
-        return new SendMessage(update.message().chat().id(), "Спасибо! Теперь направьте, пожалуйста, фотограию Вашего питомца, чтобы мы убедились, что с ним все хорошо!");
+        return new SendMessage(update.message().chat().id(), "Спасибо! Теперь направьте, пожалуйста, фотографию Вашего питомца, чтобы мы убедились, что с ним все хорошо!");
     }
 
     public SendMessage dietRequest(Update update) {

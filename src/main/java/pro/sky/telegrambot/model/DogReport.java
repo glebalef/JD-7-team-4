@@ -92,6 +92,18 @@ public class DogReport {
         this.newHabitsAppear = newHabitsAppear;
     }
 
+    @Override
+    public String toString() {
+        return
+                " Номер отчета:" + id +
+                " Кличка собаки:" + dog.getName() +
+                " Диета по словам усыновителя:" + diet + '\'' +
+                " Отчет о собаке по словам усыновителя:" + generalCondition + '\'' +
+                " Появились ли новые привычик? " + newHabitsAppear +
+                " Отказалась ли собака от старых привычек? " + oldHabitsRefuse +
+                " Дата и время отчета: " + reportDateTime;
+    }
+
     public Boolean getOldHabitsRefuse() {
         return oldHabitsRefuse;
     }

@@ -4,6 +4,7 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.request.SendPhoto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.lang.Nullable;
@@ -301,7 +302,10 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 //если сообщение прислано ботом с id (5713161862L) из чата волонтеров
                 if (update.message().replyToMessage().from().id().equals(5713161862L)
                         && !update.message().replyToMessage().text().contains("номер телефона")
-                        && !update.message().replyToMessage().text().contains("отчет")) {
+                        && !update.message().replyToMessage().text().contains("отчет")
+                        && !update.message().replyToMessage().text().contains("Вы кормите")
+                        && !update.message().replyToMessage().text().contains("фотографию")
+                        && !update.message().replyToMessage().text().contains("фото")){
                     telegramBot.execute(replyMessages.anotherQuestionMessage(update));
                 }
                 // Принимает ответ от волонтера для пользователя
@@ -354,6 +358,8 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                             dogReport3.setFileId(update.message().photo()[0].fileId());
                             reportRepository.save(dogReport3);
                             telegramBot.execute(replyMessages.reportIsSaved(update).replyMarkup(keyboards.getInfoKeyboard()));
+                            telegramBot.execute(new SendMessage(-1001634691308L,"Получен новый отчет:" + dogReport3.toString()));
+                            telegramBot.execute(new SendPhoto(-1001634691308L,dogReport3.getFileId()));
                         }
                         break;
                 }
