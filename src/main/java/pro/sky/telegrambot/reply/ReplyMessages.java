@@ -127,10 +127,6 @@ public final class ReplyMessages {
         return new SendMessage(update.message().chat().id(), shelter.getKitten());
     }
 
-    public SendMessage problemAnimal(Update update) {
-        return new SendMessage(update.message().chat().id(), "Выберете интересующий раздел");
-    }
-
     public SendMessage blind(Update update) {
         return new SendMessage(update.message().chat().id(), shelter.getBlind());
     }
