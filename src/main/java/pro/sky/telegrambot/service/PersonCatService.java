@@ -5,22 +5,22 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.exception.WrongPhoneNumberException;
-import pro.sky.telegrambot.model.Person;
+import pro.sky.telegrambot.model.PersonCat;
 import pro.sky.telegrambot.reply.Keyboards;
-import pro.sky.telegrambot.repository.PersonRepository;
+import pro.sky.telegrambot.repository.PersonCatRepository;
 
 /**
- * сервис-класс для работы с сущностью Person
+ * сервис-класс для работы с сущностью PersonCat
  *
  * @author Евгений Фисенко
  */
 @Service
-public class PersonService {
-    private final PersonRepository personRepository;
+public class PersonCatService {
+    private final PersonCatRepository personCatRepository;
     private final TelegramBot telegramBot;
 
-    public PersonService(PersonRepository personRepository, TelegramBot telegramBot) {
-        this.personRepository = personRepository;
+    public PersonCatService(PersonCatRepository personCatRepository, TelegramBot telegramBot) {
+        this.personCatRepository = personCatRepository;
         this.telegramBot = telegramBot;
     }
 
@@ -31,17 +31,17 @@ public class PersonService {
      *
      * @param update - данные о сообщении из класса TelegramBotUpdateListener
      */
-    public Person getPersonByChatId(Update update) {
+    public PersonCat getPersonByChatId(Update update) {
 
         Long chatId = update.message().chat().id();
 
-        if (personRepository.findByChatId(chatId) == null) {
-            Person newPerson = new Person();
+        if (personCatRepository.findByChatId(chatId) == null) {
+            PersonCat newPerson = new PersonCat();
 
             newPerson.setFirstName(update.message().chat().firstName());
             newPerson.setLastName(update.message().chat().lastName());
             newPerson.setChatId(chatId);
-            personRepository.save(newPerson);
+            personCatRepository.save(newPerson);
             return newPerson;
         }
 
@@ -50,7 +50,7 @@ public class PersonService {
     }
 
     /**
-     * получает от пользователя номер телефона и записывает его в таблицу Person
+     * получает от пользователя номер телефона и записывает его в таблицу PersonCat
      *
      * @param update - данные о сообщении из класса TelegramBotUpdateListener
      */
@@ -58,12 +58,12 @@ public class PersonService {
     public String phoneNumberAdd(Update update) throws WrongPhoneNumberException {
         Long chatId = update.message().chat().id();
         String phoneNumber = update.message().text();
-        Person personPhone = personRepository.findByChatId(chatId);
+        PersonCat personCatPhone = personCatRepository.findByChatId(chatId);
 
         if (phoneNumber.matches("^(([0-9]{0,3}|\\+[0-9]{1,3})[\\- ]?)?(\\(?\\d{3,4}\\)?[\\- ]?)?[\\d\\- ]{6,12}$")) {
 
-            personPhone.setPhone(phoneNumber);
-            personRepository.save(personPhone);
+            personCatPhone.setPhone(phoneNumber);
+            personCatRepository.save(personCatPhone);
 
             SendMessage success = new SendMessage(chatId, "Спасибо! Ваш номер записан.")
                     .replyMarkup(keyboards.getInitialKeyboard());
@@ -75,3 +75,4 @@ public class PersonService {
         }
     }
 }
+

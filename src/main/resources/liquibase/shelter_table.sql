@@ -50,3 +50,78 @@ CREATE TABLE cat (
     name        VARCHAR,
     person_id   INTEGER
 );
+
+-- changeset EvgenyF:8
+ALTER  TABLE person RENAME TO person_dog;
+
+-- changeset EvgenyF:9
+CREATE TABLE person_cat
+(
+    id                     BIGINT primary key,
+    chat_id                BIGINT,
+    name                   TEXT,
+    phone                  TEXT,
+    shelter_menu           TEXT
+);
+
+-- changeset EvgenyF:10
+DROP  TABLE person_cat CASCADE;
+
+-- changeset EvgenyF:11
+CREATE TABLE person_cat
+(
+    id                     BIGINT primary key,
+    chat_id                BIGINT,
+    first_name             TEXT,
+    last_name              TEXT,
+    phone                  TEXT,
+    shelter_menu           TEXT
+);
+-- changeset EvgenyF:13
+DROP  TABLE person_dog CASCADE;
+-- changeset EvgenyF:14
+CREATE TABLE person_dog
+(
+    id                     BIGINT primary key,
+    chat_id                BIGINT,
+    first_name             TEXT,
+    last_name              TEXT,
+    phone                  TEXT,
+    shelter_menu           TEXT
+);
+
+-- changeset EvgenyF:15
+DROP  TABLE person_dog CASCADE;
+
+-- changeset EvgenyF:16
+DROP  TABLE person_cat CASCADE;
+
+-- changeset EvgenyF:17
+CREATE TABLE person_dog
+(
+    id                     BIGINT primary key,
+    chat_id                BIGINT,
+    first_name             TEXT,
+    last_name              TEXT,
+    phone                  TEXT,
+    shelter_menu           TEXT
+);
+-- changeset EvgenyF:18
+
+CREATE TABLE person_cat
+(
+    id                     BIGINT primary key,
+    chat_id                BIGINT,
+    first_name             TEXT,
+    last_name              TEXT,
+    phone                  TEXT,
+    shelter_menu           TEXT
+);
+
+-- changeset EvgenyF:19
+
+ALTER  TABLE person_cat DROP COLUMN shelter_menu;
+ALTER  TABLE person_dog DROP COLUMN shelter_menu;
+
+
+
