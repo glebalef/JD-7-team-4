@@ -1,7 +1,5 @@
 package pro.sky.telegrambot.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -11,7 +9,7 @@ import java.util.Objects;
  * @author Евгений Фисенко
  */
 @Entity
-public class Person {
+public class PersonCat {
 
     /**
      * поле генерируемого идентификатора при записи пользователя в базу
@@ -40,32 +38,35 @@ public class Person {
      * поле - номер телефона пользователя (передается пользователем)
      */
     private String phone;
+
     /**
-     * поле - идентификатор собаки для таблицы person(присваивается волонтером в случае усыновления животного)
+     * поле - идентификатор собаки для таблицы PersonCat(присваивается волонтером в случае усыновления животного)
      * связь с таблицей dog
      */
+
+
     @OneToOne
-    private Dog dog;
+    private Cat cat;
 
-
-    public Person() {
+    public PersonCat() {
 
     }
 
-    public Person(Long chatId, String firstName, String lastName, String phone) {
+    public PersonCat(Long chatId, String firstName, String lastName, String phone) {
         this.chatId = chatId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
+
     }
 
 
-    public Dog getDog() {
-        return dog;
+    public Cat getCat() {
+        return cat;
     }
 
-    public void setDog(Dog dog) {
-        this.dog = dog;
+    public void setCat(Cat cat) {
+        this.cat = cat;
     }
 
     public Integer getId() {
@@ -108,12 +109,13 @@ public class Person {
         this.phone = phone;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Person person = (Person) o;
-        return Objects.equals(id, person.id) && Objects.equals(chatId, person.chatId) && Objects.equals(firstName, person.firstName) && Objects.equals(lastName, person.lastName) && Objects.equals(phone, person.phone);
+        PersonCat personCat = (PersonCat) o;
+        return Objects.equals(id, personCat.id) && Objects.equals(chatId, personCat.chatId) && Objects.equals(firstName, personCat.firstName) && Objects.equals(lastName, personCat.lastName) && Objects.equals(phone, personCat.phone);
     }
 
     @Override

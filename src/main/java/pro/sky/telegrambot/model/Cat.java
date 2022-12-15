@@ -16,7 +16,7 @@ public class Cat {
 
     @OneToOne
     @JsonIgnore
-    private Person person;
+    private PersonCat personCat;
 
     public Cat(Long id, String name, int age, String breed) {
         this.id = id;
@@ -60,7 +60,7 @@ public class Cat {
         this.breed = breed;
     }
 
-    public Person getPerson() {
-        return person;
+    public PersonCat getPersonCat() {
+        return personCat;
     }
 }
