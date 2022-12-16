@@ -158,7 +158,7 @@ public final class ReplyMessages {
     }
 
     /**
-     * Пересылает сообщение в чат волонтеров (Id чата: -1001634691308L)
+     * Пересылает сообщение в чат волонтеров приюта для собак (Id чата: -1001634691308L)
      *
      * @param update - данные о сообщении пользователя из TelegramBotUpdateListener
      * @return возвращает идентификатор сообщения, которое необходимо переслать в чат поддержки
@@ -167,16 +167,18 @@ public final class ReplyMessages {
         return new ForwardMessage(-1001634691308L, update.message().chat().id(), update.message().messageId());
     }
 
-    public SendMessage chat(Update update) {
-        return new SendMessage(-1001634691308L, "пользователь хочет задать вопрос");
-    }
-
-    public SendMessage forward(Update update) {
-        return new SendMessage(-1001634691308L, update.message().text());
+    /**
+     * Пересылает сообщение в чат волонтеров приютя для кошек (Id чата: -1001865175202L)
+     *
+     * @param update - данные о сообщении пользователя из TelegramBotUpdateListener
+     * @return возвращает идентификатор сообщения, которое необходимо переслать в чат поддержки
+     */
+    public ForwardMessage anotherQuestionMessageCat(Update update) {
+        return new ForwardMessage(-1001865175202L, update.message().chat().id(), update.message().messageId());
     }
 
     /**
-     * Возвращает ответ из чата волонтеров пользователю в бот
+     * Возвращает ответ из чата волонтеров приюта для собак пользователю в бот
      *
      * @param update- данные о сообщении пользователя из TelegramBotUpdateListener
      * @return возвращает строку сообщения из чата поддержки
@@ -184,7 +186,6 @@ public final class ReplyMessages {
 
     public SendMessage replyMessage(Update update) {
         return new SendMessage(update.message().replyToMessage().forwardFrom().id(), update.message().text());
-
     }
 
     public SendMessage photoRequest(Update update) {

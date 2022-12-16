@@ -79,47 +79,43 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
 
             try {
                 switch (Objects.requireNonNull(parse(update.message().text()))) {
-                    // для кнопки /start
+                    // для кнопкок меню бота
                     case START:
-                        personDogService.getPersonByChatId(update);
-                        personCatService.getPersonByChatId(update);
-
                         // начальное меню
+                        // выбор приюта
                         telegramBot.execute(replyMessages.chooseShelterMessage(update)
                                 .replyMarkup(keyboards.getChooseShelter()));
                         break;
-
+                        // запись нового пользователя в базу person_dog
+                        // выбор меню приюта для собак
                     case DOG_SHELTER:
-
+                        personDogService.getPersonByChatId(update);
                         shelterType.setType("dog");
 
                         telegramBot.execute(replyMessages.initialMessage(update)
                                 .replyMarkup(keyboards.getInitialKeyboard()));
-
-
                         break;
-
+                    // запись нового пользователя в базу person_cat
+                    // выбор меню приюта для кошек
                     case CAT_SHELTER:
+                        personCatService.getPersonByChatId(update);
                         shelterType.setType("cat");
 
                         telegramBot.execute(replyMessages.initialMessage(update)
                                 .replyMarkup(keyboards.getInitialKeyboard()));
-
-
                         break;
-
                     //  пункт 1. Информация о приюте
                     case SHELTER_MENU:
                         telegramBot.execute(replyMessages.infoMessage(update)
                                 .replyMarkup(keyboards.getInfoKeyboard()));
                         break;
+
                     case HOW_TO_ADOPT:
-
                         telegramBot.execute(replyMessages.howToAdopt(update).replyMarkup(keyboards.getAdoptKeyboard()));
-
                         break;
 
                     case SHELTER_INFO:
+                        //условие в блоке if для проверки вида меню (для собак или кошек)
                         if (shelterType.getType().equals("dog")) {
                             telegramBot.execute(replyMessages.generalInfoMessage(update));
                         } else {
@@ -145,7 +141,6 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         }
                         break;
 
-
                     case SHELTER_RULES:
                         if (shelterType.getType().equals("dog")) {
                             telegramBot.execute(replyMessages.rulesInfoMessage(update));
@@ -158,7 +153,12 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         // показывает кнопку "Вернуться в меню"
                         telegramBot.execute(replyMessages.feedBack(update));
                         // Пересылает запрос "Позвать волонтера" в чат волонтеров
-                        telegramBot.execute(replyMessages.anotherQuestionMessage(update));
+                        if (shelterType.getType().equals("dog")) {
+                            telegramBot.execute(replyMessages.anotherQuestionMessage(update));
+                        }
+                        else {
+                            telegramBot.execute(replyMessages.anotherQuestionMessageCat(update));
+                        }
                         break;
 
                     case TEL_REQUEST:
@@ -245,7 +245,6 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         telegramBot.execute(replyMessages.disabled(update));
                         break;
 
-
                     case REPORT_REQUEST:
                         telegramBot.execute(replyMessages.reportRequest(update)
                                 .replyMarkup(keyboards.getAutoReply()));
@@ -299,15 +298,27 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 }
 
                 //ответ пользователя волонтеру в чат волонтеров
-                //если сообщение прислано ботом с id (5713161862L) из чата волонтеров
+                //если сообщение прислано ботом с id (5713161862L) из чата волонтеров приюта для собак
                 if (update.message().replyToMessage().from().id().equals(5713161862L)
                         && !update.message().replyToMessage().text().contains("номер телефона")
                         && !update.message().replyToMessage().text().contains("отчет")
                         && !update.message().replyToMessage().text().contains("Вы кормите")
                         && !update.message().replyToMessage().text().contains("фотографию")
-                        && !update.message().replyToMessage().text().contains("фото")){
+                        && !update.message().replyToMessage().text().contains("фото")
+                        && shelterType.getType().equals("dog")){
                     telegramBot.execute(replyMessages.anotherQuestionMessage(update));
                 }
+                //если сообщение прислано ботом с id (5713161862L) из чата волонтеров приюта для кошек
+                if (update.message().replyToMessage().from().id().equals(5713161862L)
+                        && !update.message().replyToMessage().text().contains("номер телефона")
+                        && !update.message().replyToMessage().text().contains("отчет")
+                        && !update.message().replyToMessage().text().contains("Вы кормите")
+                        && !update.message().replyToMessage().text().contains("фотографию")
+                        && !update.message().replyToMessage().text().contains("фото")
+                        && shelterType.getType().equals("cat")){
+                    telegramBot.execute(replyMessages.anotherQuestionMessageCat(update));
+                }
+
                 // Принимает ответ от волонтера для пользователя
                 //если волонтер отвечает на пересланное сообщение из бота от пользователя
                 if (update.message().replyToMessage().chat().id().equals(update.message().chat().id())) {
