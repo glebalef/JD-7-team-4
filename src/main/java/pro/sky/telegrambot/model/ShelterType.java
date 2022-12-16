@@ -2,7 +2,16 @@ package pro.sky.telegrambot.model;
 
 import java.util.Objects;
 
+/**
+ * Класс выбора состояния меню telegram бота
+ *
+ * @author Евгений Фисенко
+ */
+
 public class ShelterType {
+    /**
+     * поле - состояние типа меню (для кошек или собак)
+     */
     private String type;
 
     public String getType() {
