@@ -14,7 +14,9 @@ public class Dog {
     private int age;
     private String breed;
 
-   @OneToOne
+
+
+    @OneToOne
    @JsonIgnore
     private PersonDog personDog;
 
@@ -62,5 +64,8 @@ public class Dog {
 
     public PersonDog getPersonDog() {
         return personDog;
+    }
+    public void setPersonDog(PersonDog personDog) {
+        this.personDog = personDog;
     }
 }

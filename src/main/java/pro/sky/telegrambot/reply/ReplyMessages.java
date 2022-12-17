@@ -12,7 +12,7 @@ public final class ReplyMessages {
     // изначальное сообщение для пользователя после команды /Start
 
     public SendMessage chooseShelterMessage(Update update) {
-        return new SendMessage(update.message().chat().id(), "Вас приветствует бот Кожуховского приюта. Пожалуйста, выберете интересующий Вас приют");
+        return new SendMessage(update.message().chat().id(), "Пожалуйста, выберете интересующий Вас приют");
     }
 
     public SendMessage initialMessage(Update update) {
@@ -67,10 +67,6 @@ public final class ReplyMessages {
         return new SendMessage(update.message().chat().id(), shelter.getRulesCat());
     }
 
-    public SendMessage howToAdopt(Update update) {
-        return new SendMessage(update.message().chat().id(), "Пожалуйста, выберете интересующий Вас раздел");
-    }
-
     public SendMessage securityPass(Update update) {
         return new SendMessage(update.message().chat().id(), shelter.getSecurityPass());
     }
@@ -99,16 +95,8 @@ public final class ReplyMessages {
         return new SendMessage(update.message().chat().id(), shelter.getTransportationCat());
     }
 
-    public SendMessage advice(Update update) {
-        return new SendMessage(update.message().chat().id(), "Выберете интересующий раздел");
-    }
-
     public SendMessage rejectCauses(Update update) {
         return new SendMessage(update.message().chat().id(), shelter.getRejectCauses());
-    }
-
-    public SendMessage homeAdvice(Update update) {
-        return new SendMessage(update.message().chat().id(), "Выберете интересующий раздел");
     }
 
     public SendMessage homeAdultCat(Update update) {

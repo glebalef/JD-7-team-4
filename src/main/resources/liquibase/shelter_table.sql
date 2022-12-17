@@ -123,5 +123,8 @@ CREATE TABLE person_cat
 ALTER  TABLE person_cat DROP COLUMN shelter_menu;
 ALTER  TABLE person_dog DROP COLUMN shelter_menu;
 
+-- changeset EvgenyF:20
+ALTER  TABLE cat DROP COLUMN person_id;
+ALTER  TABLE dog DROP COLUMN person_id;
 
 
