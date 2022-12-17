@@ -81,18 +81,19 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 switch (Objects.requireNonNull(parse(update.message().text()))) {
                     // для кнопкок меню бота
                     case START:
+                    case BACK_TO_CHOOSE_SHELTER:
                         // начальное меню
                         // выбор приюта
                         telegramBot.execute(replyMessages.chooseShelterMessage(update)
                                 .replyMarkup(keyboards.getChooseShelter()));
                         break;
-                        // запись нового пользователя в базу person_dog
-                        // выбор меню приюта для собак
+                    // запись нового пользователя в базу person_dog
+                    // выбор меню приюта для собак
                     case DOG_SHELTER:
                         personDogService.getPersonByChatId(update);
                         shelterType.setType("dog");
 
-                        telegramBot.execute(replyMessages.initialMessage(update)
+                        telegramBot.execute(replyMessages.generalInfoMessage(update)
                                 .replyMarkup(keyboards.getInitialKeyboard()));
                         break;
                     // запись нового пользователя в базу person_cat
@@ -101,9 +102,15 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         personCatService.getPersonByChatId(update);
                         shelterType.setType("cat");
 
+                        telegramBot.execute(replyMessages.generalInfoMessageCat(update)
+                                .replyMarkup(keyboards.getInitialKeyboard()));
+                        break;
+
+                    case BACK_TO_INITIAL:
                         telegramBot.execute(replyMessages.initialMessage(update)
                                 .replyMarkup(keyboards.getInitialKeyboard()));
                         break;
+
                     //  пункт 1. Информация о приюте
                     case SHELTER_MENU:
                         telegramBot.execute(replyMessages.infoMessage(update)
@@ -111,19 +118,14 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         break;
 
                     case HOW_TO_ADOPT:
-                        telegramBot.execute(replyMessages.howToAdopt(update).replyMarkup(keyboards.getAdoptKeyboard()));
+                    case BACK_TO_ADOPT:
+                        telegramBot.execute(replyMessages.initialMessage(update)
+                                .replyMarkup(keyboards.getAdoptKeyboard()));
                         break;
 
-                    case SHELTER_INFO:
-                        //условие в блоке if для проверки вида меню (для собак или кошек)
-                        if (shelterType.getType().equals("dog")) {
-                            telegramBot.execute(replyMessages.generalInfoMessage(update));
-                        } else {
-                            telegramBot.execute(replyMessages.generalInfoMessageCat(update));
-                        }
-                        break;
 
                     case SHELTER_SCHEDULE:
+                        //условие в блоке if для проверки вида меню (для собак или кошек)
                         if (shelterType.getType().equals("dog")) {
                             telegramBot.execute(replyMessages.schedualInfoMessage(update));
                         } else {
@@ -155,8 +157,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         // Пересылает запрос "Позвать волонтера" в чат волонтеров
                         if (shelterType.getType().equals("dog")) {
                             telegramBot.execute(replyMessages.anotherQuestionMessage(update));
-                        }
-                        else {
+                        } else {
                             telegramBot.execute(replyMessages.anotherQuestionMessageCat(update));
                         }
                         break;
@@ -195,11 +196,12 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         break;
 
                     case RECOMMENDATIONS:
+                    case BACK_TO_ADVICE:
                         if (shelterType.getType().equals("dog")) {
-                            telegramBot.execute(replyMessages.advice(update)
+                            telegramBot.execute(replyMessages.initialMessage(update)
                                     .replyMarkup(keyboards.getAdviceKeyboard()));
                         } else {
-                            telegramBot.execute(replyMessages.advice(update)
+                            telegramBot.execute(replyMessages.initialMessage(update)
                                     .replyMarkup(keyboards.getAdviceKeyboardCat()));
                         }
                         break;
@@ -209,7 +211,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         break;
 
                     case HOME_ADVICE:
-                        telegramBot.execute(replyMessages.homeAdvice(update)
+                        telegramBot.execute(replyMessages.initialMessage(update)
                                 .replyMarkup(keyboards.getHomeKeyboard()));
                         break;
 
@@ -246,8 +248,22 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         break;
 
                     case REPORT_REQUEST:
-                        telegramBot.execute(replyMessages.reportRequest(update)
-                                .replyMarkup(keyboards.getAutoReply()));
+                        if (shelterType.getType().equals("dog")
+                                && personDogRepository.findByChatId(update.message().chat().id()).getDog() == null) {
+                            telegramBot.execute(replyMessages.noDogResponse(update)
+                                    .replyMarkup(keyboards.getInitialKeyboard()));
+                        }
+
+                        if (shelterType.getType().equals("cat")
+                                && personCatRepository.findByChatId(update.message().chat().id()).getCat() == null) {
+                            telegramBot.execute(replyMessages.noDogResponse(update)
+                                    .replyMarkup(keyboards.getInitialKeyboard()));
+                        } else {
+                            telegramBot.execute(replyMessages.reportRequest(update)
+                                    .replyMarkup(keyboards.getAutoReply()));
+                        }
+
+
                         break;
 
                     case OLD_HABITS_NEGATIVE:
@@ -298,25 +314,20 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 }
 
                 //ответ пользователя волонтеру в чат волонтеров
-                //если сообщение прислано ботом с id (5713161862L) из чата волонтеров приюта для собак
                 if (update.message().replyToMessage().from().id().equals(5713161862L)
                         && !update.message().replyToMessage().text().contains("номер телефона")
                         && !update.message().replyToMessage().text().contains("отчет")
                         && !update.message().replyToMessage().text().contains("Вы кормите")
                         && !update.message().replyToMessage().text().contains("фотографию")
-                        && !update.message().replyToMessage().text().contains("фото")
-                        && shelterType.getType().equals("dog")){
-                    telegramBot.execute(replyMessages.anotherQuestionMessage(update));
-                }
-                //если сообщение прислано ботом с id (5713161862L) из чата волонтеров приюта для кошек
-                if (update.message().replyToMessage().from().id().equals(5713161862L)
-                        && !update.message().replyToMessage().text().contains("номер телефона")
-                        && !update.message().replyToMessage().text().contains("отчет")
-                        && !update.message().replyToMessage().text().contains("Вы кормите")
-                        && !update.message().replyToMessage().text().contains("фотографию")
-                        && !update.message().replyToMessage().text().contains("фото")
-                        && shelterType.getType().equals("cat")){
-                    telegramBot.execute(replyMessages.anotherQuestionMessageCat(update));
+                        && !update.message().replyToMessage().text().contains("фото")) {
+                    //если сообщение прислано ботом с id (5713161862L) из чата волонтеров приюта для собак
+                    if (shelterType.getType().equals("dog")) {
+                        telegramBot.execute(replyMessages.anotherQuestionMessage(update));
+                    }
+                    //если сообщение прислано ботом с id (5713161862L) из чата волонтеров приюта для кошек
+                    else {
+                        telegramBot.execute(replyMessages.anotherQuestionMessageCat(update));
+                    }
                 }
 
                 // Принимает ответ от волонтера для пользователя
@@ -324,7 +335,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 if (update.message().replyToMessage().chat().id().equals(update.message().chat().id())) {
                     telegramBot.execute(replyMessages.replyMessage(update)
                             .replyMarkup(keyboards.getAutoReply()));
-                }
+                    }
 
             } catch (NullPointerException ignored) {
             } catch (WrongPhoneNumberException e) {
@@ -337,26 +348,24 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
             try {
                 switch (Objects.requireNonNull(parse(update.message().replyToMessage().text()))) {
                     case REPLY_REPORT_REQUEST:
-                        if (personDogRepository.findByChatId(update.message().chat().id()).getDog() == null) {
-                            telegramBot.execute(replyMessages.noDogResponse(update));
-                        } else {
-                            DogReport dogReport = new DogReport(
-                                    personDogRepository.findByChatId(update.message().chat().id()).getDog(),
-                                    null,
-                                    update.message().text(),
-                                    null,
-                                    null,
-                                    Instant.ofEpochSecond(update.message().date()).atZone(ZoneId.systemDefault()).toLocalDateTime(),
-                                    null);
-                            reportRepository.save(dogReport);
-                            telegramBot.execute(replyMessages.dietRequest(update).replyMarkup(keyboards.getAutoReply()));
-                        }
+                        DogReport dogReport = new DogReport(
+                                personDogRepository.findByChatId(update.message().chat().id()).getDog(),
+                                null,
+                                update.message().text(),
+                                null,
+                                null,
+                                Instant.ofEpochSecond(update.message().date()).atZone(ZoneId.systemDefault()).toLocalDateTime(),
+                                null);
+                        reportRepository.save(dogReport);
+                        telegramBot.execute(replyMessages.dietRequest(update).replyMarkup(keyboards.getAutoReply()));
+
                         break;
 
                     case DESCRIBE_DIET:
-                        DogReport dogReport = reportRepository.findDogReportByFileIdAndDogId(null, personDogRepository.findByChatId(update.message().chat().id()).getDog().getId());
-                        dogReport.setDiet(update.message().text());
-                        reportRepository.save(dogReport);
+
+                        DogReport dogReport2 = reportRepository.findDogReportByFileIdAndDogId(null, personDogRepository.findByChatId(update.message().chat().id()).getDog().getId());
+                        dogReport2.setDiet(update.message().text());
+                        reportRepository.save(dogReport2);
                         telegramBot.execute(replyMessages.oldHabitsRequest(update).replyMarkup(keyboards.getOldHabits()));
                         break;
 
@@ -368,14 +377,15 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                             DogReport dogReport3 = reportRepository.findDogReportByFileIdAndDogId(null, personDogRepository.findByChatId(update.message().chat().id()).getDog().getId());
                             dogReport3.setFileId(update.message().photo()[0].fileId());
                             reportRepository.save(dogReport3);
-                            telegramBot.execute(replyMessages.reportIsSaved(update).replyMarkup(keyboards.getInfoKeyboard()));
-                            telegramBot.execute(new SendMessage(-1001634691308L,"Получен новый отчет:" + dogReport3.toString()));
-                            telegramBot.execute(new SendPhoto(-1001634691308L,dogReport3.getFileId()));
+                            telegramBot.execute(replyMessages.reportIsSaved(update).replyMarkup(keyboards.getInitialKeyboard()));
+                            telegramBot.execute(new SendMessage(-1001634691308L, "Получен новый отчет:" + dogReport3.toString()));
+                            telegramBot.execute(new SendPhoto(-1001634691308L, dogReport3.getFileId()));
                         }
                         break;
                 }
             } catch (NullPointerException ignored) {
             }
+
             logger.info("поймал NPE");
         });
 

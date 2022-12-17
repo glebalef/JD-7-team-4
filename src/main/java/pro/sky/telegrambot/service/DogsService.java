@@ -2,6 +2,7 @@ package pro.sky.telegrambot.service;
 
 import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.model.Dog;
+import pro.sky.telegrambot.model.PersonDog;
 import pro.sky.telegrambot.repository.DogsRepository;
 
 import java.util.Optional;
