@@ -11,13 +11,15 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.constant.Commands;
 import pro.sky.telegrambot.exception.WrongPhoneNumberException;
+import pro.sky.telegrambot.model.CatReport;
 import pro.sky.telegrambot.model.DogReport;
 import pro.sky.telegrambot.model.ShelterType;
 import pro.sky.telegrambot.reply.Keyboards;
 import pro.sky.telegrambot.reply.ReplyMessages;
+import pro.sky.telegrambot.repository.CatReportRepository;
 import pro.sky.telegrambot.repository.PersonCatRepository;
 import pro.sky.telegrambot.repository.PersonDogRepository;
-import pro.sky.telegrambot.repository.ReportRepository;
+import pro.sky.telegrambot.repository.DogReportRepository;
 import pro.sky.telegrambot.service.PersonCatService;
 import pro.sky.telegrambot.service.PersonDogService;
 
@@ -38,16 +40,18 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     ShelterType shelterType = new ShelterType();
     private final PersonDogService personDogService;
     private final PersonDogRepository personDogRepository;
-    private final ReportRepository reportRepository;
+    private final DogReportRepository dogReportRepository;
+    private final CatReportRepository catReportRepository;
     private final PersonCatService personCatService;
     private final PersonCatRepository personCatRepository;
 
 
-    public TelegramBotUpdatesListener(TelegramBot telegramBot, PersonDogService personDogService, PersonDogRepository personDogRepository, ReportRepository reportRepository, PersonCatService personCatService, PersonCatRepository personCatRepository) {
+    public TelegramBotUpdatesListener(TelegramBot telegramBot, PersonDogService personDogService, PersonDogRepository personDogRepository, DogReportRepository dogReportRepository, CatReportRepository catReportRepository, PersonCatService personCatService, PersonCatRepository personCatRepository) {
         this.telegramBot = telegramBot;
         this.personDogService = personDogService;
         this.personDogRepository = personDogRepository;
-        this.reportRepository = reportRepository;
+        this.dogReportRepository = dogReportRepository;
+        this.catReportRepository = catReportRepository;
         this.personCatService = personCatService;
         this.personCatRepository = personCatRepository;
     }
@@ -267,31 +271,61 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         break;
 
                     case OLD_HABITS_NEGATIVE:
-                        DogReport dogReport1 = reportRepository.findDogReportByFileIdAndDogId(null, personDogRepository.findByChatId(update.message().chat().id()).getDog().getId());
-                        dogReport1.setOldHabitsRefuse(Boolean.FALSE);
-                        reportRepository.save(dogReport1);
-                        telegramBot.execute(replyMessages.newhabitsRequest(update).replyMarkup(keyboards.getNewHabits()));
+                        if (shelterType.getType().equals("dog")) {
+                            DogReport dogReport1 = dogReportRepository.findDogReportByFileIdAndDogId(null, personDogRepository.findByChatId(update.message().chat().id()).getDog().getId());
+                            dogReport1.setOldHabitsRefuse(Boolean.FALSE);
+                            dogReportRepository.save(dogReport1);
+                            telegramBot.execute(replyMessages.newhabitsRequest(update).replyMarkup(keyboards.getNewHabits()));
+                        } else if (shelterType.getType().equals("cat")) {
+                            CatReport catReport1 = catReportRepository.findCatReportByFileIdAndCatId(null, personCatRepository.findByChatId(update.message().chat().id()).getCat().getId());
+                            catReport1.setOldHabitsRefuse(Boolean.FALSE);
+                            catReportRepository.save(catReport1);
+                            telegramBot.execute(replyMessages.newhabitsRequest(update).replyMarkup(keyboards.getNewHabits()));
+                        }
                         break;
 
                     case OLD_HABITS_POSITIVE:
-                        DogReport dogReport2 = reportRepository.findDogReportByFileIdAndDogId(null, personDogRepository.findByChatId(update.message().chat().id()).getDog().getId());
-                        dogReport2.setOldHabitsRefuse(Boolean.TRUE);
-                        reportRepository.save(dogReport2);
-                        telegramBot.execute(replyMessages.newhabitsRequest(update).replyMarkup(keyboards.getNewHabits()));
+                        if (shelterType.getType().equals("dog")) {
+                            DogReport dogReport2 = dogReportRepository.findDogReportByFileIdAndDogId(null, personDogRepository.findByChatId(update.message().chat().id()).getDog().getId());
+                            dogReport2.setOldHabitsRefuse(Boolean.TRUE);
+                            dogReportRepository.save(dogReport2);
+                            telegramBot.execute(replyMessages.newhabitsRequest(update).replyMarkup(keyboards.getNewHabits()));
+                        } else if (shelterType.getType().equals("cat")) {
+                            CatReport catReport2 = catReportRepository.findCatReportByFileIdAndCatId(null, personCatRepository.findByChatId(update.message().chat().id()).getCat().getId());
+                            catReport2.setOldHabitsRefuse(Boolean.TRUE);
+                            catReportRepository.save(catReport2);
+                            telegramBot.execute(replyMessages.newhabitsRequest(update).replyMarkup(keyboards.getNewHabits()));
+                        }
                         break;
 
                     case NEW_HABITS_POSITIVE:
-                        DogReport dogReport3 = reportRepository.findDogReportByFileIdAndDogId(null, personDogRepository.findByChatId(update.message().chat().id()).getDog().getId());
-                        dogReport3.setNewHabitsAppear(Boolean.TRUE);
-                        reportRepository.save(dogReport3);
-                        telegramBot.execute(replyMessages.photoRequest(update).replyMarkup(keyboards.getAutoReply()));
+                        if (shelterType.getType().equals("dog")) {
+                            DogReport dogReport3 = dogReportRepository.findDogReportByFileIdAndDogId(null, personDogRepository.findByChatId(update.message().chat().id()).getDog().getId());
+                            dogReport3.setNewHabitsAppear(Boolean.TRUE);
+                            dogReportRepository.save(dogReport3);
+                            telegramBot.execute(replyMessages.photoRequest(update).replyMarkup(keyboards.getAutoReply()));
+                        } else if (shelterType.getType().equals("cat")) {
+                            CatReport catReport3 = catReportRepository.findCatReportByFileIdAndCatId(null, personCatRepository.findByChatId(update.message().chat().id()).getCat().getId());
+                            catReport3.setNewHabitsAppear(Boolean.TRUE);
+                            catReportRepository.save(catReport3);
+                            telegramBot.execute(replyMessages.photoRequest(update).replyMarkup(keyboards.getAutoReply()));
+
+                        }
                         break;
 
                     case NEW_HABITS_NEGATIVE:
-                        DogReport dogReport4 = reportRepository.findDogReportByFileIdAndDogId(null, personDogRepository.findByChatId(update.message().chat().id()).getDog().getId());
-                        dogReport4.setNewHabitsAppear(Boolean.FALSE);
-                        reportRepository.save(dogReport4);
-                        telegramBot.execute(replyMessages.photoRequest(update).replyMarkup(keyboards.getAutoReply()));
+                        if (shelterType.getType().equals("dog")) {
+                            DogReport dogReport4 = dogReportRepository.findDogReportByFileIdAndDogId(null, personDogRepository.findByChatId(update.message().chat().id()).getDog().getId());
+                            dogReport4.setNewHabitsAppear(Boolean.FALSE);
+                            dogReportRepository.save(dogReport4);
+                            telegramBot.execute(replyMessages.photoRequest(update).replyMarkup(keyboards.getAutoReply()));
+                        } else if (shelterType.getType().equals("cat")) {
+                            CatReport catReport4 = catReportRepository.findCatReportByFileIdAndCatId(null, personCatRepository.findByChatId(update.message().chat().id()).getCat().getId());
+                            catReport4.setNewHabitsAppear(Boolean.FALSE);
+                            catReportRepository.save(catReport4);
+                            telegramBot.execute(replyMessages.photoRequest(update).replyMarkup(keyboards.getAutoReply()));
+
+                        }
                         break;
 
                     case PERSISTENT_PHOTO_REQUEST:
@@ -335,7 +369,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 if (update.message().replyToMessage().chat().id().equals(update.message().chat().id())) {
                     telegramBot.execute(replyMessages.replyMessage(update)
                             .replyMarkup(keyboards.getAutoReply()));
-                    }
+                }
 
             } catch (NullPointerException ignored) {
             } catch (WrongPhoneNumberException e) {
@@ -348,47 +382,75 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
             try {
                 switch (Objects.requireNonNull(parse(update.message().replyToMessage().text()))) {
                     case REPLY_REPORT_REQUEST:
-                        DogReport dogReport = new DogReport(
-                                personDogRepository.findByChatId(update.message().chat().id()).getDog(),
-                                null,
-                                update.message().text(),
-                                null,
-                                null,
-                                Instant.ofEpochSecond(update.message().date()).atZone(ZoneId.systemDefault()).toLocalDateTime(),
-                                null);
-                        reportRepository.save(dogReport);
-                        telegramBot.execute(replyMessages.dietRequest(update).replyMarkup(keyboards.getAutoReply()));
-
+                        if (shelterType.getType().equals("dog")) {
+                            DogReport dogReport = new DogReport(
+                                    personDogRepository.findByChatId(update.message().chat().id()).getDog(),
+                                    null,
+                                    update.message().text(),
+                                    null,
+                                    null,
+                                    Instant.ofEpochSecond(update.message().date()).atZone(ZoneId.systemDefault()).toLocalDateTime(),
+                                    null);
+                            dogReportRepository.save(dogReport);
+                            telegramBot.execute(replyMessages.dietRequest(update).replyMarkup(keyboards.getAutoReply()));
+                        } else if (shelterType.getType().equals("cat")) {
+                            CatReport catReport = new CatReport(
+                                    personCatRepository.findByChatId(update.message().chat().id()).getCat(),
+                                    null,
+                                    update.message().text(),
+                                    null,
+                                    null,
+                                    Instant.ofEpochSecond(update.message().date()).atZone(ZoneId.systemDefault()).toLocalDateTime(),
+                                    null);
+                            catReportRepository.save(catReport);
+                            telegramBot.execute(replyMessages.dietRequest(update).replyMarkup(keyboards.getAutoReply()));
+                        }
                         break;
 
                     case DESCRIBE_DIET:
+                        if (shelterType.getType().equals("dog")) {
+                            DogReport dogReport2 = dogReportRepository.findDogReportByFileIdAndDogId(null, personDogRepository.findByChatId(update.message().chat().id()).getDog().getId());
+                            dogReport2.setDiet(update.message().text());
+                            dogReportRepository.save(dogReport2);
+                            telegramBot.execute(replyMessages.oldHabitsRequest(update).replyMarkup(keyboards.getOldHabits()));
+                        } else if (shelterType.getType().equals("cat")) {
+                            CatReport catReport2 = catReportRepository.findCatReportByFileIdAndCatId(null, personCatRepository.findByChatId(update.message().chat().id()).getCat().getId());
+                            catReport2.setDiet(update.message().text());
+                            catReportRepository.save(catReport2);
+                            telegramBot.execute(replyMessages.oldHabitsRequest(update).replyMarkup(keyboards.getOldHabits()));
 
-                        DogReport dogReport2 = reportRepository.findDogReportByFileIdAndDogId(null, personDogRepository.findByChatId(update.message().chat().id()).getDog().getId());
-                        dogReport2.setDiet(update.message().text());
-                        reportRepository.save(dogReport2);
-                        telegramBot.execute(replyMessages.oldHabitsRequest(update).replyMarkup(keyboards.getOldHabits()));
+                        }
                         break;
 
                     case INITIAL_PHOTO_REQUEST:
                     case PERSISTENT_PHOTO_REQUEST:
                         if (update.message().photo() == null) {
                             telegramBot.execute(replyMessages.persistantPhotoRequest(update).replyMarkup(keyboards.getAutoReply()));
-                        } else {
-                            DogReport dogReport3 = reportRepository.findDogReportByFileIdAndDogId(null, personDogRepository.findByChatId(update.message().chat().id()).getDog().getId());
+                        }
+
+                        if (shelterType.getType().equals("dog")) {
+
+                            DogReport dogReport3 = dogReportRepository.findDogReportByFileIdAndDogId(null, personDogRepository.findByChatId(update.message().chat().id()).getDog().getId());
                             dogReport3.setFileId(update.message().photo()[0].fileId());
-                            reportRepository.save(dogReport3);
+                            dogReportRepository.save(dogReport3);
                             telegramBot.execute(replyMessages.reportIsSaved(update).replyMarkup(keyboards.getInitialKeyboard()));
                             telegramBot.execute(new SendMessage(-1001634691308L, "Получен новый отчет:" + dogReport3.toString()));
                             telegramBot.execute(new SendPhoto(-1001634691308L, dogReport3.getFileId()));
+
+                            } else if (shelterType.getType().equals("cat")) {
+                            CatReport catReport3 = catReportRepository.findCatReportByFileIdAndCatId(null, personCatRepository.findByChatId(update.message().chat().id()).getCat().getId());
+                            catReport3.setFileId(update.message().photo()[0].fileId());
+                            catReportRepository.save(catReport3);
+                            telegramBot.execute(replyMessages.reportIsSaved(update).replyMarkup(keyboards.getInitialKeyboard()));
+                            telegramBot.execute(new SendMessage(-1001865175202L, "Получен новый отчет:" + catReport3.toString()));
+                            telegramBot.execute(new SendPhoto(-1001865175202L, catReport3.getFileId()));
                         }
-                        break;
+                            break;
                 }
             } catch (NullPointerException ignored) {
+                logger.info("поймал NPE");
             }
-
-            logger.info("поймал NPE");
         });
-
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
 }
