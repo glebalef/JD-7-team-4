@@ -12,8 +12,8 @@ public interface DogReportRepository extends JpaRepository<DogReport,Long> {
 
     public DogReport findDogReportByFileIdAndDogId (String fileId, Long personId);
 
-   /* @Query(value="select  dog_id, max(report_date)from dog_report group by dog_id", nativeQuery = true)
-    public Collection<DogReport>findDogReports();*/
+    @Query(value="select  dog_id, max(report_date)from dog_report group by dog_id", nativeQuery = true)
+    public Collection<DogReport>findDogReports();
 
 
 }

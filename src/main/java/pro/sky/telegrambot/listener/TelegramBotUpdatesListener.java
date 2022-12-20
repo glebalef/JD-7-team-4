@@ -472,8 +472,8 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
 
                 telegramBot.execute(sendMessage);
 
-            /*SendMessage sendToPerson = new SendMessage(dogReport.getDog().getPersonDog().getChatId(), "Где отчет???");
-            telegramBot.execute(sendToPerson);*/
+            SendMessage sendToPerson = new SendMessage(dogReport.getDog().getPersonDog().getChatId(), "Где отчет???");
+            telegramBot.execute(sendToPerson);
             }
         }
     }*/
