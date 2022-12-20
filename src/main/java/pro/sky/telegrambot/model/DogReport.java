@@ -2,7 +2,7 @@ package pro.sky.telegrambot.model;
 
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Objects;
 
 
@@ -35,7 +35,7 @@ public class DogReport {
     private Boolean oldHabitsRefuse;
 
     @Column(name = "report_date")
-    private LocalDateTime reportDateTime;
+    private LocalDate reportDate;
 
     @Column (name = "file_id")
     private String fileId;
@@ -101,7 +101,7 @@ public class DogReport {
                 " Отчет о собаке по словам усыновителя:" + generalCondition + '\'' +
                 " Появились ли новые привычик? " + newHabitsAppear +
                 " Отказалась ли собака от старых привычек? " + oldHabitsRefuse +
-                " Дата и время отчета: " + reportDateTime;
+                " Дата и время отчета: " + reportDate;
     }
 
     public Boolean getOldHabitsRefuse() {
@@ -112,21 +112,21 @@ public class DogReport {
         this.oldHabitsRefuse = oldHabitsRefuse;
     }
 
-    public LocalDateTime getReportDateTime() {
-        return reportDateTime;
+    public LocalDate getreportDate() {
+        return reportDate;
     }
 
-    public void setReportDateTime(LocalDateTime reportDateTime) {
-        this.reportDateTime = reportDateTime;
+    public void setreportDate(LocalDate reportDate) {
+        this.reportDate = reportDate;
     }
 
-    public DogReport(Dog dog, String diet, String generalCondition, Boolean newHabitsAppear, Boolean oldHabitsRefuse, LocalDateTime reportDateTime, String fileId) {
+    public DogReport(Dog dog, String diet, String generalCondition, Boolean newHabitsAppear, Boolean oldHabitsRefuse, LocalDate reportDate, String fileId) {
         this.dog = dog;
         this.diet = diet;
         this.generalCondition = generalCondition;
         this.newHabitsAppear = newHabitsAppear;
         this.oldHabitsRefuse = oldHabitsRefuse;
-        this.reportDateTime = reportDateTime;
+        this.reportDate = reportDate;
         this.fileId = fileId;
 
 

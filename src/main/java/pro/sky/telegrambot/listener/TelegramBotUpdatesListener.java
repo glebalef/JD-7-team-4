@@ -8,6 +8,7 @@ import com.pengrad.telegrambot.request.SendPhoto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.lang.Nullable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.constant.Commands;
 import pro.sky.telegrambot.exception.WrongPhoneNumberException;
@@ -22,9 +23,12 @@ import pro.sky.telegrambot.repository.PersonDogRepository;
 import pro.sky.telegrambot.repository.DogReportRepository;
 import pro.sky.telegrambot.service.PersonCatService;
 import pro.sky.telegrambot.service.PersonDogService;
+import pro.sky.telegrambot.service.SchedulerService;
 
 import javax.annotation.PostConstruct;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Objects;
@@ -44,9 +48,10 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     private final CatReportRepository catReportRepository;
     private final PersonCatService personCatService;
     private final PersonCatRepository personCatRepository;
+    private final SchedulerService schedulerService;
 
 
-    public TelegramBotUpdatesListener(TelegramBot telegramBot, PersonDogService personDogService, PersonDogRepository personDogRepository, DogReportRepository dogReportRepository, CatReportRepository catReportRepository, PersonCatService personCatService, PersonCatRepository personCatRepository) {
+    public TelegramBotUpdatesListener(TelegramBot telegramBot, PersonDogService personDogService, PersonDogRepository personDogRepository, DogReportRepository dogReportRepository, CatReportRepository catReportRepository, PersonCatService personCatService, PersonCatRepository personCatRepository, SchedulerService schedulerService) {
         this.telegramBot = telegramBot;
         this.personDogService = personDogService;
         this.personDogRepository = personDogRepository;
@@ -54,6 +59,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
         this.catReportRepository = catReportRepository;
         this.personCatService = personCatService;
         this.personCatRepository = personCatRepository;
+        this.schedulerService = schedulerService;
     }
 
     @PostConstruct
@@ -389,7 +395,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                                     update.message().text(),
                                     null,
                                     null,
-                                    Instant.ofEpochSecond(update.message().date()).atZone(ZoneId.systemDefault()).toLocalDateTime(),
+                                    Instant.ofEpochSecond(update.message().date()).atZone(ZoneId.systemDefault()).toLocalDate(),
                                     null);
                             dogReportRepository.save(dogReport);
                             telegramBot.execute(replyMessages.dietRequest(update).replyMarkup(keyboards.getAutoReply()));
@@ -400,7 +406,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                                     update.message().text(),
                                     null,
                                     null,
-                                    Instant.ofEpochSecond(update.message().date()).atZone(ZoneId.systemDefault()).toLocalDateTime(),
+                                    Instant.ofEpochSecond(update.message().date()).atZone(ZoneId.systemDefault()).toLocalDate(),
                                     null);
                             catReportRepository.save(catReport);
                             telegramBot.execute(replyMessages.dietRequest(update).replyMarkup(keyboards.getAutoReply()));
@@ -437,7 +443,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                             telegramBot.execute(new SendMessage(-1001634691308L, "Получен новый отчет:" + dogReport3.toString()));
                             telegramBot.execute(new SendPhoto(-1001634691308L, dogReport3.getFileId()));
 
-                            } else if (shelterType.getType().equals("cat")) {
+                        } else if (shelterType.getType().equals("cat")) {
                             CatReport catReport3 = catReportRepository.findCatReportByFileIdAndCatId(null, personCatRepository.findByChatId(update.message().chat().id()).getCat().getId());
                             catReport3.setFileId(update.message().photo()[0].fileId());
                             catReportRepository.save(catReport3);
@@ -445,7 +451,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                             telegramBot.execute(new SendMessage(-1001865175202L, "Получен новый отчет:" + catReport3.toString()));
                             telegramBot.execute(new SendPhoto(-1001865175202L, catReport3.getFileId()));
                         }
-                            break;
+                        break;
                 }
             } catch (NullPointerException ignored) {
                 logger.info("поймал NPE");
@@ -453,6 +459,25 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
         });
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
+
+   /* @Scheduled(cron = "0 0/1 * * * *")
+    public void sendNotification() {
+        logger.info("Поиск отчетов");
+
+        for (DogReport dogReport : schedulerService.checkReports()) {
+            if(dogReport.getreportDate().isAfter(LocalDate.now().minusDays(2))){
+
+
+                SendMessage sendMessage = new SendMessage(-1001634691308L, "Отчет о собаке " + dogReport.getDog().getName().toString() + " от усыновителя " + dogReport.getDog().getPersonDog().getFirstName().toString() +  " не поступал уже 2 дня");
+
+                telegramBot.execute(sendMessage);
+
+            SendMessage sendToPerson = new SendMessage(dogReport.getDog().getPersonDog().getChatId(), "Где отчет???");
+            telegramBot.execute(sendToPerson);
+            }
+        }
+    }*/
 }
+
 
 

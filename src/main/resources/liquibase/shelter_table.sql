@@ -127,4 +127,12 @@ ALTER  TABLE person_dog DROP COLUMN shelter_menu;
 ALTER  TABLE cat DROP COLUMN person_id;
 ALTER  TABLE dog DROP COLUMN person_id;
 
+-- changeset EvgenyF:21
+ALTER table dog_report alter column report_date type date;
+
+-- changeset EvgenyF:21
+ALTER table cat_report alter column report_date type date;
+
+
+
 
