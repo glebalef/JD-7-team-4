@@ -94,8 +94,8 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                     case BACK_TO_CHOOSE_SHELTER:
                         // начальное меню
                         // выбор приюта
-                        telegramBot.execute(replyMessages.chooseShelterMessage(update)
-                                .replyMarkup(keyboards.getChooseShelter()));
+                            telegramBot.execute(replyMessages.chooseShelterMessage(update)
+                                    .replyMarkup(keyboards.getChooseShelter()));
                         break;
                     // запись нового пользователя в базу person_dog
                     // выбор меню приюта для собак
