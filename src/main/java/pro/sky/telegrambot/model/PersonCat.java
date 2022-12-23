@@ -39,11 +39,20 @@ public class PersonCat {
      */
     private String phone;
 
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
     /**
      * поле - идентификатор собаки для таблицы PersonCat(присваивается волонтером в случае усыновления животного)
      * связь с таблицей dog
      */
-
+    @OneToOne(mappedBy = "personCat")
+    private Context context;
 
     @OneToOne
     private Cat cat;

@@ -130,9 +130,19 @@ ALTER  TABLE dog DROP COLUMN person_id;
 -- changeset EvgenyF:21
 ALTER table dog_report alter column report_date type date;
 
--- changeset EvgenyF:21
+-- changeset EvgenyF:22
 ALTER table cat_report alter column report_date type date;
 
 
-
+-- changeset EvgenyF:23
+CREATE TABLE context (
+id                     BIGINT primary key,
+chat_id                BIGINT,
+type                   TEXT,
+add_days               TEXT,
+test_off               BOOLEAN
+);
+-- changeset EvgenyF:23
+Alter table context drop column id,
+    add column id bigserial primary key;
 
