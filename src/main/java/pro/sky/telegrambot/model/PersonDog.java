@@ -48,6 +48,18 @@ public class PersonDog {
     @OneToOne
     private Dog dog;
 
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    @OneToOne(mappedBy = "personDog")
+    private Context context;
+
+
     public PersonDog() {
 
     }

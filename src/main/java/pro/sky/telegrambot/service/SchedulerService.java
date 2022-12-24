@@ -15,10 +15,17 @@ public class SchedulerService {
     {this.dogReportRepository = dogReportRepository;
 }
 
-    public Collection<DogReport> checkReports() {
+    public Collection<DogReport> findNewDogReports() {
 
         return dogReportRepository.findDogReports();
-    }}
+    }
+    public Collection<DogReport> findOldDogReports() {
+
+        return dogReportRepository.findFirstReports();
+    }
+
+
+}
 
 
 
