@@ -10,10 +10,13 @@ import java.util.Collection;
 @Repository
 public interface DogReportRepository extends JpaRepository<DogReport,Long> {
 
-    public DogReport findDogReportByFileIdAndDogId (String fileId, Long personId);
+    DogReport findDogReportByFileIdAndDogId (String fileId, Long personId);
 
-    @Query(value="select  dog_id, max(report_date)from dog_report group by dog_id", nativeQuery = true)
-    public Collection<DogReport>findDogReports();
+    @Query(value="select distinct  on (dog_id) * from dog_report order by dog_id, report_date desc ", nativeQuery = true)
+    Collection<DogReport>findDogReports();
+
+    @Query(value="select distinct  on (dog_id) * from dog_report order by dog_id, report_date ", nativeQuery = true)
+     Collection<DogReport>findFirstReports();
 
 
 }
