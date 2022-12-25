@@ -1,13 +1,15 @@
 package pro.sky.telegrambot.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Objects;
 @Entity
 
 public class Context {
     @Id
-    @GeneratedValue
-    private Integer id;
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    private Long id;
     private Long chatId;
     private String type;
     private String addDays;
@@ -22,6 +24,7 @@ public class Context {
     }
 
     @OneToOne
+    @JsonIgnore
     private PersonDog personDog;
 
 
@@ -34,6 +37,7 @@ public class Context {
     }
 
     @OneToOne
+    @JsonIgnore
     private PersonCat personCat;
 
 
@@ -48,11 +52,11 @@ public class Context {
         this.testOff = testOff;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

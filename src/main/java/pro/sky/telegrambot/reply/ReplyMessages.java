@@ -20,11 +20,11 @@ public final class ReplyMessages {
     }
 
     public SendMessage infoMessage(Update update) {
-        return new SendMessage(update.message().chat().id(), "Какую иформацию Вы хотели бы узнать?");
+        return new SendMessage(update.message().chat().id(), "Какую информацию Вы хотели бы узнать?");
     }
 
     public SendMessage reportRequest(Update update) {
-        return new SendMessage(update.message().chat().id(), "Направьте, пожалуйста, отчет о Вашем питоце в сообщении ниже:");
+        return new SendMessage(update.message().chat().id(), "Направьте, пожалуйста, отчет о Вашем питомце в сообщении ниже:");
     }
 
     public SendMessage noDogResponse(Update update) {
