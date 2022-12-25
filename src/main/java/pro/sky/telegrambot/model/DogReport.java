@@ -3,7 +3,6 @@ package pro.sky.telegrambot.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Objects;
 
 
 /**
@@ -19,8 +18,8 @@ public class DogReport {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "dog_id")
-    private Dog dog;
+    @JoinColumn(name = "person_dog_id")
+    private PersonDog personDog;
 
     @Column(name = "diet")
     private String diet;
@@ -28,10 +27,10 @@ public class DogReport {
     @Column(name = "condition")
     private String generalCondition;
 
-    @Column(name = "newhabits")
+    @Column(name = "new_habits")
     private Boolean newHabitsAppear;
 
-    @Column(name = "oldhabits")
+    @Column(name = "old_habits")
     private Boolean oldHabitsRefuse;
 
     @Column(name = "report_date")
@@ -60,12 +59,12 @@ public class DogReport {
         this.id = id;
     }
 
-    public Dog getDog() {
-        return dog;
+    public PersonDog getPersonDog() {
+        return personDog;
     }
 
-    public void setDog(Dog dog) {
-        this.dog = dog;
+    public void setPersonDog(PersonDog personDog) {
+        this.personDog = personDog;
     }
 
     public String getDiet() {
@@ -96,7 +95,7 @@ public class DogReport {
     public String toString() {
         return
                 " Номер отчета:" + id +
-                " Кличка собаки:" + dog.getName() +
+                " Кличка собаки:" + personDog.getDog().getName() +
                 " Диета по словам усыновителя:" + diet + '\'' +
                 " Отчет о собаке по словам усыновителя:" + generalCondition + '\'' +
                 " Появились ли новые привычик? " + newHabitsAppear +
@@ -112,16 +111,16 @@ public class DogReport {
         this.oldHabitsRefuse = oldHabitsRefuse;
     }
 
-    public LocalDate getreportDate() {
+    public LocalDate getReportDate() {
         return reportDate;
     }
 
-    public void setreportDate(LocalDate reportDate) {
+    public void setReportDate(LocalDate reportDate) {
         this.reportDate = reportDate;
     }
 
-    public DogReport(Dog dog, String diet, String generalCondition, Boolean newHabitsAppear, Boolean oldHabitsRefuse, LocalDate reportDate, String fileId) {
-        this.dog = dog;
+    public DogReport(PersonDog personDog, String diet, String generalCondition, Boolean newHabitsAppear, Boolean oldHabitsRefuse, LocalDate reportDate, String fileId) {
+        this.personDog = personDog;
         this.diet = diet;
         this.generalCondition = generalCondition;
         this.newHabitsAppear = newHabitsAppear;

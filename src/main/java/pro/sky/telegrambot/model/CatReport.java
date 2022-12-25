@@ -18,8 +18,8 @@ public class CatReport  {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "cat_id")
-    private Cat cat;
+    @JoinColumn(name = "person_cat_id")
+    private PersonCat personCat;
 
     @Column(name = "diet")
     private String diet;
@@ -27,10 +27,10 @@ public class CatReport  {
     @Column(name = "condition")
     private String generalCondition;
 
-    @Column(name = "newhabits")
+    @Column(name = "new_habits")
     private Boolean newHabitsAppear;
 
-    @Column(name = "oldhabits")
+    @Column(name = "old_habits")
     private Boolean oldHabitsRefuse;
 
     @Column(name = "report_date")
@@ -59,12 +59,12 @@ public class CatReport  {
         this.id = id;
     }
 
-    public Cat getCat() {
-        return cat;
+    public PersonCat getPersonCat() {
+        return personCat;
     }
 
-    public void setCat(Cat cat) {
-        this.cat = cat;
+    public void setPersonCat(PersonCat personCat) {
+        this.personCat = personCat;
     }
 
     public String getDiet() {
@@ -95,7 +95,7 @@ public class CatReport  {
     public String toString() {
         return
                 " Номер отчета:" + id +
-                        " Кличка кошки:" + cat.getName() +
+                        " Кличка кошки:" + personCat.getCat().getName() +
                         " Диета по словам усыновителя:" + diet + '\'' +
                         " Отчет о кошке по словам усыновителя:" + generalCondition + '\'' +
                         " Появились ли новые привычик? " + newHabitsAppear +
@@ -111,16 +111,16 @@ public class CatReport  {
         this.oldHabitsRefuse = oldHabitsRefuse;
     }
 
-    public LocalDate getreportDate() {
+    public LocalDate getReportDate() {
         return reportDate;
     }
 
-    public void setreportDate(LocalDate reportDate) {
+    public void setReportDate(LocalDate reportDate) {
         this.reportDate = reportDate;
     }
 
-    public CatReport(Cat cat, String diet, String generalCondition, Boolean newHabitsAppear, Boolean oldHabitsRefuse, LocalDate reportDate, String fileId) {
-        this.cat = cat;
+    public CatReport(PersonCat personCat, String diet, String generalCondition, Boolean newHabitsAppear, Boolean oldHabitsRefuse, LocalDate reportDate, String fileId) {
+        this.personCat = personCat;
         this.diet = diet;
         this.generalCondition = generalCondition;
         this.newHabitsAppear = newHabitsAppear;

@@ -5,9 +5,13 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.exception.WrongPhoneNumberException;
+import pro.sky.telegrambot.model.Dog;
 import pro.sky.telegrambot.model.PersonDog;
 import pro.sky.telegrambot.reply.Keyboards;
+import pro.sky.telegrambot.repository.DogsRepository;
 import pro.sky.telegrambot.repository.PersonDogRepository;
+
+import java.util.Optional;
 
 /**
  * сервис-класс для работы с сущностью PersonDog
@@ -18,10 +22,12 @@ import pro.sky.telegrambot.repository.PersonDogRepository;
 public class PersonDogService {
     private final PersonDogRepository personDogRepository;
     private final TelegramBot telegramBot;
+    private final DogsRepository dogsRepository;
 
-    public PersonDogService(PersonDogRepository personDogRepository, TelegramBot telegramBot) {
+    public PersonDogService(PersonDogRepository personDogRepository, TelegramBot telegramBot, DogsRepository dogsRepository) {
         this.personDogRepository = personDogRepository;
         this.telegramBot = telegramBot;
+        this.dogsRepository = dogsRepository;
     }
 
     Keyboards keyboards = new Keyboards();
@@ -74,4 +80,51 @@ public class PersonDogService {
             throw new WrongPhoneNumberException("номер содержит неверные символы");
         }
     }
+
+    /**
+     * Метод добавления Усыновителя собаки
+     * @param personDog создается объект Усыновитель собаки
+     * @return Новый усыновитель
+     */
+    public PersonDog addPersonDog(PersonDog personDog) {
+        return personDogRepository.save(personDog);
+    }
+
+    /**
+     * Метод поиска усыновителя собаки по его идентификатору в БД.
+     * <br>
+     * Используется метод репозитория {@link org.springframework.data.jpa.repository.JpaRepository#findById(Object)}
+     * @param id идентификатор искомого усыновителя собаки
+     * @return найденный усыновитель собаки
+     */
+    public PersonDog getPersonDog(Long id) {
+        return personDogRepository.findById(id).orElse(null);
+    }
+
+    /**
+     * Метод присвоения собаки усыновителю и редактирования необходимых данных
+     * @param personDog Усыновитель, которому необходимо присвоить собаку
+     * @return присвоенная собака усыновителю, отредактированные данные
+     */
+
+    public PersonDog EditPersonDogAndAssignDog (PersonDog personDog) {
+        Optional<PersonDog> optional = personDogRepository.findById(personDog.getId());
+        if (optional.isPresent()) {
+            PersonDog fromDB = optional.get();
+            fromDB.setFirstName(personDog.getFirstName());
+            fromDB.setLastName(personDog.getLastName());
+            fromDB.setPhone(personDog.getPhone());
+            return personDogRepository.save(fromDB);
+        }
+        return null;
+    }
+
+    /**
+     * Метод удаления усыновителя собаки из БД
+     * @param id идентификатор удаляемого усыновителя собаки
+     */
+    public void deleteDog(Long id) {
+        personDogRepository.deleteById(id);
+    }
+
 }

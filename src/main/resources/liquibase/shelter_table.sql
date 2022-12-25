@@ -1,148 +1,93 @@
 -- liquibase formatted sql
 
--- changeset EvgenyF:1
-CREATE TABLE person
+-- changeset EvgenyL:1
+CREATE TABLE dog
 (
-    id                     BIGINT primary key,
-    chat_id                BIGINT,
-    name                   TEXT,
-    phone                  TEXT
+    id            BIGSERIAL primary key,
+    name          VARCHAR,
+    age           INTEGER,
+    breed         VARCHAR
 );
 
--- changeset EvgenyF:2
-Alter TABLE person rename column name to first_name;
-ALTER table person add column last_name text;
+CREATE TABLE cat
+(
+    id            BIGSERIAL primary key,
+    name          VARCHAR,
+    age           INTEGER,
+    breed         VARCHAR
+);
 
--- changeset EvgenyF:3
-Alter table person drop column name;
+CREATE TABLE person_dog
+(
+    id            BIGSERIAL primary key,
+    chat_id       BIGSERIAL,
+    first_name    VARCHAR,
+    last_name     VARCHAR,
+    phone         VARCHAR,
+    dog_id        BIGSERIAL REFERENCES dog (id)
+);
 
+CREATE TABLE person_cat
+(
+    id            BIGSERIAL primary key,
+    chat_id       BIGSERIAL,
+    first_name    VARCHAR,
+    last_name     VARCHAR,
+    phone         VARCHAR,
+    cat_id        BIGSERIAL REFERENCES cat (id)
+);
 
--- changeset Gleb:4
 CREATE TABLE dog_report
 (
-     id                     BIGSERIAL primary key,
-     diet                   TEXT,
-     condition              TEXT,
-     newhabits              BOOLEAN,
-     oldhabits              BOOLEAN,
-     report_date            timestamp,
-     dog_id                 BIGSERIAL,
-     file_id                TEXT
+    id              BIGSERIAL PRIMARY KEY,
+    chat_id         BIGSERIAL,
+    person_dog_id   BIGSERIAL REFERENCES person_dog (id),
+    diet            TEXT,
+    condition       TEXT,
+    new_habits      BOOLEAN,
+    old_habits      BOOLEAN,
+    report_date     TIMESTAMP,
+    file_id         TEXT
 );
 
--- changeset Gleb:5
-CREATE TABLE dog (
-    id BIGSERIAL primary key,
-    age INTEGER,
-    breed VARCHAR,
-    name VARCHAR,
-    person_id INTEGER
-);
-
--- changeset Gleb:6
-DROP TABLE dog CASCADE;
-
--- changeset EvgeniyL:7
-CREATE TABLE cat (
-    id          BIGSERIAL primary key,
-    age         INTEGER,
-    breed       VARCHAR,
-    name        VARCHAR,
-    person_id   INTEGER
-);
-
--- changeset EvgenyF:8
-ALTER  TABLE person RENAME TO person_dog;
-
--- changeset EvgenyF:9
-CREATE TABLE person_cat
+CREATE TABLE cat_report
 (
-    id                     BIGINT primary key,
-    chat_id                BIGINT,
-    name                   TEXT,
-    phone                  TEXT,
-    shelter_menu           TEXT
+    id              BIGSERIAL PRIMARY KEY,
+    chat_id         BIGSERIAL,
+    person_cat_id   BIGSERIAL REFERENCES person_cat (id),
+    diet            TEXT,
+    condition       TEXT,
+    new_habits      BOOLEAN,
+    old_habits      BOOLEAN,
+    report_date     TIMESTAMP,
+    file_id         TEXT
 );
 
--- changeset EvgenyF:10
-DROP  TABLE person_cat CASCADE;
-
--- changeset EvgenyF:11
-CREATE TABLE person_cat
+CREATE TABLE context
 (
-    id                     BIGINT primary key,
-    chat_id                BIGINT,
-    first_name             TEXT,
-    last_name              TEXT,
-    phone                  TEXT,
-    shelter_menu           TEXT
-);
--- changeset EvgenyF:13
-DROP  TABLE person_dog CASCADE;
--- changeset EvgenyF:14
-CREATE TABLE person_dog
-(
-    id                     BIGINT primary key,
-    chat_id                BIGINT,
-    first_name             TEXT,
-    last_name              TEXT,
-    phone                  TEXT,
-    shelter_menu           TEXT
+    id              BIGSERIAL PRIMARY KEY,
+    chat_id         BIGSERIAL,
+    type            VARCHAR,
+    add_days        VARCHAR,
+    test_off        BOOLEAN,
+    person_dog_id   BIGSERIAL REFERENCES person_dog (id),
+    person_cat_id   BIGSERIAL REFERENCES person_cat (id)
 );
 
--- changeset EvgenyF:15
-DROP  TABLE person_dog CASCADE;
+-- changeset EvgenyL:2
+ALTER TABLE dog_report DROP COLUMN report_date,
+    ADD COLUMN dog_report DATE;
 
--- changeset EvgenyF:16
-DROP  TABLE person_cat CASCADE;
+-- changeset EvgenyL:3
+ALTER TABLE cat_report DROP COLUMN report_date,
+                       ADD COLUMN cat_report DATE;
 
--- changeset EvgenyF:17
-CREATE TABLE person_dog
-(
-    id                     BIGINT primary key,
-    chat_id                BIGINT,
-    first_name             TEXT,
-    last_name              TEXT,
-    phone                  TEXT,
-    shelter_menu           TEXT
-);
--- changeset EvgenyF:18
+-- changeset EvgenyL:4
+ALTER TABLE dog_report DROP COLUMN dog_report,
+                       ADD COLUMN report_date DATE;
 
-CREATE TABLE person_cat
-(
-    id                     BIGINT primary key,
-    chat_id                BIGINT,
-    first_name             TEXT,
-    last_name              TEXT,
-    phone                  TEXT,
-    shelter_menu           TEXT
-);
+-- changeset EvgenyL:5
+ALTER TABLE cat_report DROP COLUMN cat_report,
+                       ADD COLUMN report_date DATE;
 
--- changeset EvgenyF:19
-
-ALTER  TABLE person_cat DROP COLUMN shelter_menu;
-ALTER  TABLE person_dog DROP COLUMN shelter_menu;
-
--- changeset EvgenyF:20
-ALTER  TABLE cat DROP COLUMN person_id;
-ALTER  TABLE dog DROP COLUMN person_id;
-
--- changeset EvgenyF:21
-ALTER table dog_report alter column report_date type date;
-
--- changeset EvgenyF:22
-ALTER table cat_report alter column report_date type date;
-
-
--- changeset EvgenyF:23
-CREATE TABLE context (
-id                     BIGINT primary key,
-chat_id                BIGINT,
-type                   TEXT,
-add_days               TEXT,
-test_off               BOOLEAN
-);
--- changeset EvgenyF:23
-Alter table context drop column id,
-    add column id bigserial primary key;
 

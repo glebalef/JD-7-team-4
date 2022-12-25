@@ -1,7 +1,5 @@
 package pro.sky.telegrambot.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 
 @Entity
@@ -14,11 +12,6 @@ public class Dog {
     private int age;
     private String breed;
 
-
-
-    @OneToOne
-   @JsonIgnore
-    private PersonDog personDog;
 
     public Dog(Long id, String name, int age, String breed) {
         this.id = id;
@@ -62,10 +55,4 @@ public class Dog {
         this.breed = breed;
     }
 
-    public PersonDog getPersonDog() {
-        return personDog;
-    }
-    public void setPersonDog(PersonDog personDog) {
-        this.personDog = personDog;
-    }
 }

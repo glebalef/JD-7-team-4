@@ -43,8 +43,9 @@ public class CatsService {
         Optional<Cat> optional = catsRepository.findById(cat.getId());
         if (optional.isPresent()) {
             Cat fromDB = optional.get();
-            fromDB.setName(fromDB.getName());
-            fromDB.setAge(fromDB.getAge());
+            fromDB.setName(cat.getName());
+            fromDB.setAge(cat.getAge());
+            fromDB.setBreed(cat.getBreed());
             return catsRepository.save(fromDB);
         }
         return null;

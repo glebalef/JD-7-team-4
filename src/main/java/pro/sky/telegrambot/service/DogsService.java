@@ -2,8 +2,8 @@ package pro.sky.telegrambot.service;
 
 import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.model.Dog;
-import pro.sky.telegrambot.model.PersonDog;
 import pro.sky.telegrambot.repository.DogsRepository;
+import pro.sky.telegrambot.repository.PersonDogRepository;
 
 import java.util.Optional;
 
@@ -14,6 +14,7 @@ private final DogsRepository dogsRepository;
 
     public DogsService(DogsRepository dogsRepository) {
         this.dogsRepository = dogsRepository;
+
     }
 
     /**
@@ -45,8 +46,8 @@ private final DogsRepository dogsRepository;
         Optional<Dog> optional = dogsRepository.findById(dog.getId());
         if (optional.isPresent()) {
             Dog fromDB = optional.get();
-            fromDB.setName(fromDB.getName());
-            fromDB.setAge(fromDB.getAge());
+            fromDB.setName(dog.getName());
+            fromDB.setAge(dog.getAge());
             return dogsRepository.save(fromDB);
         }
         return null;
@@ -59,4 +60,6 @@ private final DogsRepository dogsRepository;
     public void deleteDog(Long id) {
         dogsRepository.deleteById(id);
     }
+
+
 }

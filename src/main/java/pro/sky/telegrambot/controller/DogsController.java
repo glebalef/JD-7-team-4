@@ -74,7 +74,7 @@ public class DogsController {
     )
 
     @PutMapping("{id}")
-    public ResponseEntity<Dog> editDog(@RequestBody Dog dog) {
+    public ResponseEntity<Dog> editDog (@RequestBody Dog dog) {
         Dog editorialDog = dogsService.editDog(dog);
         if (editorialDog == null) {
             ResponseEntity.badRequest().build();

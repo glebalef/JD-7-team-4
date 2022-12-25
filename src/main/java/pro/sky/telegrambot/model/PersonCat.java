@@ -1,5 +1,7 @@
 package pro.sky.telegrambot.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -16,8 +18,7 @@ public class PersonCat {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    private Integer id;
+    private Long id;
 
     /**
      * поле уникального идентификатора пользователя в приложении telegram (присваивается автоматически)
@@ -48,10 +49,11 @@ public class PersonCat {
     }
 
     /**
-     * поле - идентификатор собаки для таблицы PersonCat(присваивается волонтером в случае усыновления животного)
-     * связь с таблицей dog
+     * поле - идентификатор кошки для таблицы PersonCat(присваивается волонтером в случае усыновления животного)
+     * связь с таблицей cat
      */
     @OneToOne(mappedBy = "personCat")
+    @JsonIgnore
     private Context context;
 
     @OneToOne
@@ -78,11 +80,11 @@ public class PersonCat {
         this.cat = cat;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
