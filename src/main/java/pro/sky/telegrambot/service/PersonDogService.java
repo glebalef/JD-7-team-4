@@ -29,7 +29,6 @@ public class PersonDogService {
         this.telegramBot = telegramBot;
         this.dogsRepository = dogsRepository;
     }
-
     Keyboards keyboards = new Keyboards();
 
     /**
