@@ -6,7 +6,11 @@ import pro.sky.telegrambot.model.Context;
 import pro.sky.telegrambot.repository.ContextRepository;
 import pro.sky.telegrambot.repository.PersonCatRepository;
 import pro.sky.telegrambot.repository.PersonDogRepository;
-
+/**
+ * сервис-класс для работы с сущностью Context
+ *
+ * @author Евгений Фисенко
+ */
 @Service
 public class ContextService {
     private final ContextRepository contextRepository;
@@ -19,6 +23,11 @@ public class ContextService {
         this.personDogRepository = personDogRepository;
         this.personCatRepository = personCatRepository;
     }
+    /**
+     * получает пользователя и, если это новый пользователь, заносит пользователя в базу
+     *
+     * @param update - данные о сообщении из класса TelegramBotUpdateListener
+     */
 
     public Context getContextByChatId(Update update) {
         Long chatId = update.message().chat().id();
@@ -26,8 +35,6 @@ public class ContextService {
             Context context = new Context();
             context.setChatId(chatId);
             context.setTestOff(false);
-            context.setPersonDog(personDogRepository.findByChatId(chatId));
-            context.setPersonCat(personCatRepository.findByChatId(chatId));
             contextRepository.save(context);
             return context;
         }
