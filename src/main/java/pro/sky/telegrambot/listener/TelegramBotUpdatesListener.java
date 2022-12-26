@@ -112,6 +112,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                     case DOG_SHELTER:
                         personDogService.getPersonByChatId(update);
                         context.setType("dog");
+                        context.setPersonDog(personDogRepository.findByChatId(update.message().chat().id()));
                         contextRepository.save(context);
 
 
@@ -123,6 +124,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                     case CAT_SHELTER:
                         personCatService.getPersonByChatId(update);
                         context.setType("cat");
+                        context.setPersonCat(personCatRepository.findByChatId(update.message().chat().id()));
                         contextRepository.save(context);
 
 
