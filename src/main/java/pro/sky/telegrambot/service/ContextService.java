@@ -6,6 +6,7 @@ import pro.sky.telegrambot.model.Context;
 import pro.sky.telegrambot.repository.ContextRepository;
 import pro.sky.telegrambot.repository.PersonCatRepository;
 import pro.sky.telegrambot.repository.PersonDogRepository;
+
 /**
  * сервис-класс для работы с сущностью Context
  *
@@ -23,6 +24,7 @@ public class ContextService {
         this.personDogRepository = personDogRepository;
         this.personCatRepository = personCatRepository;
     }
+
     /**
      * получает пользователя и, если это новый пользователь, заносит пользователя в базу
      *

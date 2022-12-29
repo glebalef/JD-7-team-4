@@ -16,6 +16,7 @@ public class CatsService {
 
     /**
      * Метод добавления кошки
+     *
      * @param cat создается объект кошка
      * @return кошка
      */
@@ -27,6 +28,7 @@ public class CatsService {
      * Метод поиска кошки по ее идентификатору в БД.
      * <br>
      * Используется метод репозитория {@link org.springframework.data.jpa.repository.JpaRepository#findById(Object)}
+     *
      * @param id идентификатор искомой кошки
      * @return найденная кошка
      */
@@ -36,11 +38,12 @@ public class CatsService {
 
     /**
      * Метод редактирования характеристик кошки.
+     *
      * @param cat кошка, которая нуждается в редактировании
      * @return исправленные характеристики кошки
      */
-    public Cat editCat(Cat cat) {
-        Optional<Cat> optional = catsRepository.findById(cat.getId());
+    public Cat editCat(Long id, Cat cat) {
+        Optional<Cat> optional = catsRepository.findById(id);
         if (optional.isPresent()) {
             Cat fromDB = optional.get();
             fromDB.setName(cat.getName());
@@ -53,6 +56,7 @@ public class CatsService {
 
     /**
      * Метод удаления кошки из БД
+     *
      * @param id идентификатор удаляемой кошки
      */
     public void deleteCat(Long id) {

@@ -73,6 +73,9 @@ CREATE TABLE context
     person_cat_id   BIGINT REFERENCES person_cat (id)
 );
 
+-- changeset EvgenyL:2
+ALTER TABLE cat_report DROP COLUMN chat_id;
+
 
 
 

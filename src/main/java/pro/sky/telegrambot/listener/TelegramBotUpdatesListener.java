@@ -153,15 +153,15 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                     case SHELTER_SCHEDULE:
                         //условие в блоке if для проверки вида меню (для собак или кошек)
                         if (context.getType().equals("dog")) {
-                            telegramBot.execute(replyMessages.schedualInfoMessage(update));
+                            telegramBot.execute(replyMessages.scheduleInfoMessage(update));
                         } else {
-                            telegramBot.execute(replyMessages.schedualInfoMessageCat(update));
+                            telegramBot.execute(replyMessages.scheduleInfoMessageCat(update));
                         }
                         break;
 
                     case SHELTER_ADDRESS:
                         if (context.getType().equals("dog")) {
-                            telegramBot.execute(replyMessages.adressInfoMessage(update)
+                            telegramBot.execute(replyMessages.addressInfoMessage(update)
                                     .replyMarkup(keyboards.getShowOnMap()));
                         } else {
                             telegramBot.execute(replyMessages.addressInfoMessageCat(update)
@@ -295,12 +295,12 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                             DogReport dogReport1 = dogReportRepository.findDogReportByFileIdAndPersonDogId(null, personDogRepository.findByChatId(update.message().chat().id()).getId());
                             dogReport1.setOldHabitsRefuse(Boolean.FALSE);
                             dogReportRepository.save(dogReport1);
-                            telegramBot.execute(replyMessages.newhabitsRequest(update).replyMarkup(keyboards.getNewHabits()));
+                            telegramBot.execute(replyMessages.newHabitsRequest(update).replyMarkup(keyboards.getNewHabits()));
                         } else if (context.getType().equals("cat")) {
                             CatReport catReport1 = catReportRepository.findCatReportByFileIdAndPersonCatId(null, personCatRepository.findByChatId(update.message().chat().id()).getId());
                             catReport1.setOldHabitsRefuse(Boolean.FALSE);
                             catReportRepository.save(catReport1);
-                            telegramBot.execute(replyMessages.newhabitsRequest(update).replyMarkup(keyboards.getNewHabits()));
+                            telegramBot.execute(replyMessages.newHabitsRequest(update).replyMarkup(keyboards.getNewHabits()));
                         }
                         break;
 
@@ -309,12 +309,12 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                             DogReport dogReport2 = dogReportRepository.findDogReportByFileIdAndPersonDogId(null, personDogRepository.findByChatId(update.message().chat().id()).getId());
                             dogReport2.setOldHabitsRefuse(Boolean.TRUE);
                             dogReportRepository.save(dogReport2);
-                            telegramBot.execute(replyMessages.newhabitsRequest(update).replyMarkup(keyboards.getNewHabits()));
+                            telegramBot.execute(replyMessages.newHabitsRequest(update).replyMarkup(keyboards.getNewHabits()));
                         } else if (context.getType().equals("cat")) {
                             CatReport catReport2 = catReportRepository.findCatReportByFileIdAndPersonCatId(null, personCatRepository.findByChatId(update.message().chat().id()).getId());
                             catReport2.setOldHabitsRefuse(Boolean.TRUE);
                             catReportRepository.save(catReport2);
-                            telegramBot.execute(replyMessages.newhabitsRequest(update).replyMarkup(keyboards.getNewHabits()));
+                            telegramBot.execute(replyMessages.newHabitsRequest(update).replyMarkup(keyboards.getNewHabits()));
                         }
                         break;
 
@@ -526,7 +526,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                     case INITIAL_PHOTO_REQUEST:
                     case PERSISTENT_PHOTO_REQUEST:
                         if (update.message().photo() == null) {
-                            telegramBot.execute(replyMessages.persistantPhotoRequest(update).replyMarkup(keyboards.getAutoReply()));
+                            telegramBot.execute(replyMessages.persistentPhotoRequest(update).replyMarkup(keyboards.getAutoReply()));
                         }
 
                         if (context.getType().equals("dog")) {

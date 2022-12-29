@@ -20,7 +20,7 @@ public class Dog {
         this.breed = breed;
     }
 
-    public Dog () {
+    public Dog() {
     }
 
     public Long getId() {

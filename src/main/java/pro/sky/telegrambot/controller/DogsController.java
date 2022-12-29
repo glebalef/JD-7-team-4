@@ -55,7 +55,7 @@ public class DogsController {
     public ResponseEntity<Dog> getDod(@PathVariable Long id) {
         Dog dog = dogsService.getDog(id);
         if (dog == null) {
-            ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(dog);
     }
@@ -65,7 +65,7 @@ public class DogsController {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Найденная собака для изменения характеристик",
+                            description = "Изменение характеристик у собаки",
                             content = @Content(
                                     mediaType = APPLICATION_JSON_VALUE
                             )
@@ -74,10 +74,10 @@ public class DogsController {
     )
 
     @PutMapping("{id}")
-    public ResponseEntity<Dog> editDog (@RequestBody Dog dog) {
-        Dog editorialDog = dogsService.editDog(dog);
+    public ResponseEntity<Dog> editDog(@PathVariable Long id, @RequestBody Dog dog) {
+        Dog editorialDog = dogsService.editDog(id, dog);
         if (editorialDog == null) {
-            ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(editorialDog);
     }
