@@ -10,7 +10,7 @@ import java.util.Optional;
 @Service
 public class DogsService {
 
-private final DogsRepository dogsRepository;
+    private final DogsRepository dogsRepository;
 
     public DogsService(DogsRepository dogsRepository) {
         this.dogsRepository = dogsRepository;
@@ -19,6 +19,7 @@ private final DogsRepository dogsRepository;
 
     /**
      * Метод добавления собаки
+     *
      * @param dog создается объект собака
      * @return собака
      */
@@ -30,6 +31,7 @@ private final DogsRepository dogsRepository;
      * Метод поиска собаки по ее идентификатору в БД.
      * <br>
      * Используется метод репозитория {@link org.springframework.data.jpa.repository.JpaRepository#findById(Object)}
+     *
      * @param id идентификатор искомой собаки
      * @return найденная собака
      */
@@ -39,11 +41,12 @@ private final DogsRepository dogsRepository;
 
     /**
      * Метод редактирования характеристик собаки.
+     *
      * @param dog собака, которая нуждается в редактировании
      * @return исправленные характеристики собаки
      */
-    public Dog editDog(Dog dog) {
-        Optional<Dog> optional = dogsRepository.findById(dog.getId());
+    public Dog editDog(Long id, Dog dog) {
+        Optional<Dog> optional = dogsRepository.findById(id);
         if (optional.isPresent()) {
             Dog fromDB = optional.get();
             fromDB.setName(dog.getName());
@@ -55,6 +58,7 @@ private final DogsRepository dogsRepository;
 
     /**
      * Метод удаления собаки из БД
+     *
      * @param id идентификатор удаляемой собаки
      */
     public void deleteDog(Long id) {

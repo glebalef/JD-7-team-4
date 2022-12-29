@@ -21,7 +21,7 @@ public class Cat {
         this.breed = breed;
     }
 
-    public Cat () {
+    public Cat() {
     }
 
     public Long getId() {

@@ -43,7 +43,6 @@ public class DogsControllerTest {
         final String name = "David";
         final int age = 5;
         final String breed = "labrador";
-        final Long personId = 1L;
         Dog dog = new Dog(id, name, age, breed);
 
         JSONObject dogsObject = new JSONObject();
@@ -51,7 +50,6 @@ public class DogsControllerTest {
         dogsObject.put("name", name);
         dogsObject.put("age", age);
         dogsObject.put("breed", breed);
-        dogsObject.put("personId", personId);
 
         Mockito.when(dogsRepository.save(any(Dog.class))).thenReturn(dog);
         Mockito.when(dogsRepository.findById(any(Long.class))).thenReturn(Optional.of(dog));
@@ -65,8 +63,7 @@ public class DogsControllerTest {
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.name").value(name))
                 .andExpect(jsonPath("$.age").value(age))
-                .andExpect(jsonPath("$.breed").value(breed))
-                .andExpect(jsonPath("$.personId").value(personId));
+                .andExpect(jsonPath("$.breed").value(breed));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/dog/" + id)
@@ -77,8 +74,7 @@ public class DogsControllerTest {
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.name").value(name))
                 .andExpect(jsonPath("$.age").value(age))
-                .andExpect(jsonPath("$.breed").value(breed))
-                .andExpect(jsonPath("$.personId").value(personId));
+                .andExpect(jsonPath("$.breed").value(breed));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/dog/" + id)
@@ -87,8 +83,7 @@ public class DogsControllerTest {
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.name").value(name))
                 .andExpect(jsonPath("$.age").value(age))
-                .andExpect(jsonPath("$.breed").value(breed))
-                .andExpect(jsonPath("$.personId").value(personId));
+                .andExpect(jsonPath("$.breed").value(breed));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .delete("/dog/" + id)

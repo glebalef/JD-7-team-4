@@ -55,7 +55,7 @@ public class CatsController {
     public ResponseEntity<Cat> getCat(@PathVariable Long id) {
         Cat cat = catsService.getCat(id);
         if (cat == null) {
-            ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(cat);
     }
@@ -65,7 +65,7 @@ public class CatsController {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Найденная кошка для изменения характеристик",
+                            description = "Изменение характеристик у кошки",
                             content = @Content(
                                     mediaType = APPLICATION_JSON_VALUE
                             )
@@ -74,10 +74,10 @@ public class CatsController {
     )
 
     @PutMapping("{id}")
-    public ResponseEntity<Cat> editCat(@RequestBody Cat cat) {
-        Cat editorialCat = catsService.editCat(cat);
+    public ResponseEntity<Cat> editCat(@PathVariable Long id, @RequestBody Cat cat) {
+        Cat editorialCat = catsService.editCat(id, cat);
         if (editorialCat == null) {
-            ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(editorialCat);
     }

@@ -10,7 +10,7 @@ import java.time.LocalDate;
  */
 @Entity
 @Table(name = "cat_report")
-public class CatReport  {
+public class CatReport {
 
     @GeneratedValue
     @Id
@@ -36,7 +36,7 @@ public class CatReport  {
     @Column(name = "report_date")
     private LocalDate reportDate;
 
-    @Column (name = "file_id")
+    @Column(name = "file_id")
     private String fileId;
 
     public String getFileId() {

@@ -9,6 +9,8 @@ import pro.sky.telegrambot.model.PersonCat;
 import pro.sky.telegrambot.reply.Keyboards;
 import pro.sky.telegrambot.repository.PersonCatRepository;
 
+import java.util.Optional;
+
 /**
  * сервис-класс для работы с сущностью PersonCat
  *
@@ -73,6 +75,56 @@ public class PersonCatService {
         } else {
             throw new WrongPhoneNumberException("номер содержит неверные символы");
         }
+    }
+
+    /**
+     * Метод добавления Усыновителя кошки
+     *
+     * @param personCat создается объект Усыновитель кошки
+     * @return Новый усыновитель
+     */
+    public PersonCat addPersonCat(PersonCat personCat) {
+        return personCatRepository.save(personCat);
+    }
+
+    /**
+     * Метод поиска усыновителя кошки по его идентификатору в БД.
+     * <br>
+     * Используется метод репозитория {@link org.springframework.data.jpa.repository.JpaRepository#findById(Object)}
+     *
+     * @param id идентификатор искомого усыновителя кошки
+     * @return найденный усыновитель кошки
+     */
+    public PersonCat getPersonCat(Long id) {
+        return personCatRepository.findById(id).orElse(null);
+    }
+
+    /**
+     * Метод присвоения кошки усыновителю и редактирования необходимых данных
+     *
+     * @param personCat Усыновитель, которому необходимо присвоить кошку
+     * @return присвоенная кошка усыновителю, отредактированные данные
+     */
+
+    public PersonCat EditPersonCatAndAssignCat(Long id, PersonCat personCat) {
+        Optional<PersonCat> optional = personCatRepository.findById(id);
+        if (optional.isPresent()) {
+            PersonCat fromDB = optional.get();
+            fromDB.setFirstName(personCat.getFirstName());
+            fromDB.setLastName(personCat.getLastName());
+            fromDB.setPhone(personCat.getPhone());
+            return personCatRepository.save(fromDB);
+        }
+        return null;
+    }
+
+    /**
+     * Метод удаления усыновителя кошки из БД
+     *
+     * @param id идентификатор удаляемого усыновителя кошки
+     */
+    public void deletePersonCat(Long id) {
+        personCatRepository.deleteById(id);
     }
 }
 

@@ -5,26 +5,27 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pro.sky.telegrambot.model.PersonDog;
-import pro.sky.telegrambot.service.PersonDogService;
+import pro.sky.telegrambot.model.PersonCat;
+import pro.sky.telegrambot.service.PersonCatService;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping("/personDog")
-public class PersonDogController {
-    private final PersonDogService personDogService;
+@RequestMapping("/personCat")
+public class PersonCatController {
 
-    public PersonDogController(PersonDogService personDogService) {
-        this.personDogService = personDogService;
+    private final PersonCatService personCatService;
+
+    public PersonCatController(PersonCatService personCatService) {
+        this.personCatService = personCatService;
     }
 
     @Operation(
-            summary = "Внесение в БД нового усыновителя собаки, если пришел не из телеграм бота",
+            summary = "Внесение в БД нового усыновителя кошки, если пришел не из телеграм бота",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Созданный усыновитель собаки",
+                            description = "Созданный усыновитель кошки",
                             content = @Content(
                                     mediaType = APPLICATION_JSON_VALUE
                             )
@@ -33,16 +34,16 @@ public class PersonDogController {
     )
 
     @PostMapping
-    public PersonDog addPersonDog(@RequestBody PersonDog personDog) {
-        return personDogService.addPersonDog(personDog);
+    public PersonCat addPersonCat(@RequestBody PersonCat personCat) {
+        return personCatService.addPersonCat(personCat);
     }
 
     @Operation(
-            summary = "Поиск необходимого усыновителя собаки по идентификатору",
+            summary = "Поиск необходимого усыновителя кошки по идентификатору",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Найденный усыновитель собаки",
+                            description = "Найденный усыновитель кошки",
                             content = @Content(
                                     mediaType = APPLICATION_JSON_VALUE
                             )
@@ -51,20 +52,20 @@ public class PersonDogController {
     )
 
     @GetMapping("{id}")
-    public ResponseEntity<PersonDog> getPersonDog(@PathVariable Long id) {
-        PersonDog personDog = personDogService.getPersonDog(id);
-        if (personDog == null) {
+    public ResponseEntity<PersonCat> getPersonCat(@PathVariable Long id) {
+        PersonCat personCat = personCatService.getPersonCat(id);
+        if (personCat == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(personDog);
+        return ResponseEntity.ok(personCat);
     }
 
     @Operation(
-            summary = "Присвоение собаки усыновителю и редактирование необходимых данных",
+            summary = "Присвоение кошки усыновителю и редактирование необходимых данных",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Присвоенная собака усыновителю, отредактированные данные",
+                            description = "Присвоенная кошка усыновителю, отредактированные данные",
                             content = @Content(
                                     mediaType = APPLICATION_JSON_VALUE
                             )
@@ -73,8 +74,8 @@ public class PersonDogController {
     )
 
     @PutMapping("{id}")
-    public ResponseEntity<PersonDog> EditPersonDogAndAssignDog(@PathVariable Long id, @RequestBody PersonDog personDog) {
-        PersonDog parent = personDogService.EditPersonDogAndAssignDog(id, personDog);
+    public ResponseEntity<PersonCat> EditPersonCatAndAssignCat(@PathVariable Long id, @RequestBody PersonCat personCat) {
+        PersonCat parent = personCatService.EditPersonCatAndAssignCat(id, personCat);
         if (parent == null) {
             return ResponseEntity.badRequest().build();
         }
@@ -82,11 +83,11 @@ public class PersonDogController {
     }
 
     @Operation(
-            summary = "Удаление необходимого усыновителя собаки по идентификатору",
+            summary = "Удаление необходимого усыновителя кошки по идентификатору",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Усыновитель собаки удален",
+                            description = "Усыновитель кошки удален",
                             content = @Content(
                                     mediaType = APPLICATION_JSON_VALUE
                             )
@@ -95,8 +96,8 @@ public class PersonDogController {
     )
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deletePersonDog(@PathVariable Long id) {
-        personDogService.deleteDog(id);
+    public ResponseEntity<Void> deletePersonCat(@PathVariable Long id) {
+        personCatService.deletePersonCat(id);
         return ResponseEntity.ok().build();
     }
 }

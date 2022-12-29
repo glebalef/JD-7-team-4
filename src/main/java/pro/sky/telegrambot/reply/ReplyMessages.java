@@ -43,16 +43,16 @@ public final class ReplyMessages {
         return new SendMessage(update.message().chat().id(), shelter.getInfoCat());
     }
 
-    public SendMessage schedualInfoMessage(Update update) {
+    public SendMessage scheduleInfoMessage(Update update) {
         return new SendMessage(update.message().chat().id(), shelter.getSchedule());
     }
 
-    public SendMessage schedualInfoMessageCat(Update update) {
+    public SendMessage scheduleInfoMessageCat(Update update) {
         return new SendMessage(update.message().chat().id(), shelter.getScheduleCat());
     }
 
-    public SendMessage adressInfoMessage(Update update) {
-        return new SendMessage(update.message().chat().id(), shelter.getAdress());
+    public SendMessage addressInfoMessage(Update update) {
+        return new SendMessage(update.message().chat().id(), shelter.getAddress());
     }
 
     public SendMessage addressInfoMessageCat(Update update) {
@@ -188,11 +188,11 @@ public final class ReplyMessages {
         return new SendMessage(update.message().chat().id(), "Расскажите, пропали ли у Вашего питомца приютские привычки?");
     }
 
-    public SendMessage newhabitsRequest(Update update) {
+    public SendMessage newHabitsRequest(Update update) {
         return new SendMessage(update.message().chat().id(), "А теперь расскажите, ведет ли себя питомец как-то по-новому?");
     }
 
-    public SendMessage persistantPhotoRequest(Update update) {
+    public SendMessage persistentPhotoRequest(Update update) {
         return new SendMessage(update.message().chat().id(), "Пожалуйста, направьте, фото! Нам надо взглянуть на Вашего зверька.");
     }
 }

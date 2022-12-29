@@ -17,7 +17,7 @@ public final class Shelter {
             "Четверг - Санитарный день. Приют не работает.";
     private final String scheduleCat = "Время посещения приюта: ежедневно с 9:00 до 21:00 без перерывов, выходных и праздничных дней";
 
-    private final String adress = "город Москва, ул. Пехорская 1Б";
+    private final String address = "город Москва, ул. Пехорская 1Б";
     private final String addressCat = "Москва, ул. Осташковская, д.14 стр.2";
     private File map = new File();
     private File mapCat = new File();
@@ -108,7 +108,7 @@ public final class Shelter {
 
     private final String blind = "Безусловно, незрячего питомца необходимо подстраховывать и оберегать от опасностей и травм. Тщательно продумайте план действий и уберите в доме все крупные вещи, способные травмировать животное. " +
             "На него может упасть плохо закрепленный неустойчивый предмет, например, напольная ваза, торшер, элемент декора. Чтобы животное не врезалось в них, такие вещи лучше убрать в недоступное для него место.";
-    private final String disabled = "Здесь должен быть какой-то текст";
+    private final String disabled = "Вход в приют оборудован пандусом и поручнями. Рядом с пандусом присутствует кнопка вызова волонтера.";
 
     public Shelter() {
     }
@@ -205,7 +205,7 @@ public final class Shelter {
         return schedule;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return address;
     }
 }

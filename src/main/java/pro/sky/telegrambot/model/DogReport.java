@@ -36,7 +36,7 @@ public class DogReport {
     @Column(name = "report_date")
     private LocalDate reportDate;
 
-    @Column (name = "file_id")
+    @Column(name = "file_id")
     private String fileId;
 
     public String getFileId() {
@@ -95,12 +95,12 @@ public class DogReport {
     public String toString() {
         return
                 " Номер отчета:" + id +
-                " Кличка собаки:" + personDog.getDog().getName() +
-                " Диета по словам усыновителя:" + diet + '\'' +
-                " Отчет о собаке по словам усыновителя:" + generalCondition + '\'' +
-                " Появились ли новые привычик? " + newHabitsAppear +
-                " Отказалась ли собака от старых привычек? " + oldHabitsRefuse +
-                " Дата и время отчета: " + reportDate;
+                        " Кличка собаки:" + personDog.getDog().getName() +
+                        " Диета по словам усыновителя:" + diet + '\'' +
+                        " Отчет о собаке по словам усыновителя:" + generalCondition + '\'' +
+                        " Появились ли новые привычик? " + newHabitsAppear +
+                        " Отказалась ли собака от старых привычек? " + oldHabitsRefuse +
+                        " Дата и время отчета: " + reportDate;
     }
 
     public Boolean getOldHabitsRefuse() {

@@ -15,12 +15,14 @@ public class SchedulerService {
     public SchedulerService(DogReportRepository dogReportRepository) {
         this.dogReportRepository = dogReportRepository;
     }
+
     /**
      * возвращает коллекцию последних отчетов по дате
      */
     public Collection<DogReport> findNewDogReports() {
         return dogReportRepository.findDogReports();
     }
+
     /**
      * возвращает коллекцию последних отчетов по дате
      */

@@ -29,6 +29,7 @@ public class PersonDogService {
         this.telegramBot = telegramBot;
         this.dogsRepository = dogsRepository;
     }
+
     Keyboards keyboards = new Keyboards();
 
     /**
@@ -82,6 +83,7 @@ public class PersonDogService {
 
     /**
      * Метод добавления Усыновителя собаки
+     *
      * @param personDog создается объект Усыновитель собаки
      * @return Новый усыновитель
      */
@@ -93,6 +95,7 @@ public class PersonDogService {
      * Метод поиска усыновителя собаки по его идентификатору в БД.
      * <br>
      * Используется метод репозитория {@link org.springframework.data.jpa.repository.JpaRepository#findById(Object)}
+     *
      * @param id идентификатор искомого усыновителя собаки
      * @return найденный усыновитель собаки
      */
@@ -102,12 +105,13 @@ public class PersonDogService {
 
     /**
      * Метод присвоения собаки усыновителю и редактирования необходимых данных
+     *
      * @param personDog Усыновитель, которому необходимо присвоить собаку
      * @return присвоенная собака усыновителю, отредактированные данные
      */
 
-    public PersonDog EditPersonDogAndAssignDog (PersonDog personDog) {
-        Optional<PersonDog> optional = personDogRepository.findById(personDog.getId());
+    public PersonDog EditPersonDogAndAssignDog(Long id, PersonDog personDog) {
+        Optional<PersonDog> optional = personDogRepository.findById(id);
         if (optional.isPresent()) {
             PersonDog fromDB = optional.get();
             fromDB.setFirstName(personDog.getFirstName());
@@ -120,6 +124,7 @@ public class PersonDogService {
 
     /**
      * Метод удаления усыновителя собаки из БД
+     *
      * @param id идентификатор удаляемого усыновителя собаки
      */
     public void deleteDog(Long id) {
