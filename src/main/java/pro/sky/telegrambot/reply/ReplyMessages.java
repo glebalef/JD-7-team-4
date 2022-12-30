@@ -115,6 +115,10 @@ public final class ReplyMessages {
         return new SendMessage(update.message().chat().id(), shelter.getKitten());
     }
 
+    public SendMessage badReportReply(Update update) {
+        return new SendMessage(update.callbackQuery().from().id(), shelter.getBadReport());
+    }
+
     public SendMessage blind(Update update) {
         return new SendMessage(update.message().chat().id(), shelter.getBlind());
     }

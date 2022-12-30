@@ -4,9 +4,7 @@ package pro.sky.telegrambot.listener;
 import com.pengrad.telegrambot.BotUtils;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.model.request.Keyboard;
 import com.pengrad.telegrambot.model.request.ParseMode;
-import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -18,12 +16,12 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pro.sky.telegrambot.reply.Keyboards;
 import pro.sky.telegrambot.reply.ReplyMessages;
+import pro.sky.telegrambot.service.SchedulerService;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.security.Key;
 import java.util.Collections;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,6 +31,8 @@ public class TelegramBotUpdatesListenerTest {
     private TelegramBotUpdatesListener telegramBotUpdatesListener;
     @Mock
     private TelegramBot telegramBot;
+    @Mock
+    SchedulerService schedulerService;
 
     @Test
     public void handleStartTest() throws URISyntaxException, IOException {
@@ -41,7 +41,6 @@ public class TelegramBotUpdatesListenerTest {
         telegramBotUpdatesListener.process(Collections.singletonList(update));
         ReplyMessages replyMessages = new ReplyMessages();
         Keyboards keyboards = new Keyboards();
-
 
 
         // тут мы считаем, что должен при команде /start выхывается следующая конструкция:
