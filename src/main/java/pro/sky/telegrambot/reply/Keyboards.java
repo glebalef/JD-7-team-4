@@ -62,7 +62,21 @@ public final class Keyboards {
             new InlineKeyboardButton("Google-карты").url("https://goo.gl/maps/gfSCartq8hrTyYUc8"),
             new InlineKeyboardButton("Яндекс-карты").url("https://yandex.ru/maps/-/CCUnyRUycD"));
 
+    private final InlineKeyboardMarkup badReportCat = new InlineKeyboardMarkup(
+            new InlineKeyboardButton("отчет заполнен плохо").callbackData("плохоCat"));
+
+    private final InlineKeyboardMarkup badReport = new InlineKeyboardMarkup(
+            new InlineKeyboardButton("отчет заполнен плохо").callbackData("плохо"));
+
     // Геттеры для клавиатур
+
+    public InlineKeyboardMarkup getBadReportCat() {
+        return badReportCat;
+    }
+
+    public InlineKeyboardMarkup getBadReport() {
+        return badReport;
+    }
 
     public Keyboard getChooseShelter() {
         return chooseShelter;
