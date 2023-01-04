@@ -3,9 +3,9 @@ package pro.sky.telegrambot.service;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.exception.WrongPhoneNumberException;
-import pro.sky.telegrambot.model.Dog;
 import pro.sky.telegrambot.model.PersonDog;
 import pro.sky.telegrambot.reply.Keyboards;
 import pro.sky.telegrambot.repository.DogsRepository;
@@ -32,17 +32,19 @@ public class PersonDogService {
 
     Keyboards keyboards = new Keyboards();
 
+
     /**
      * получает имя и фамилию пользователя и, если это новый пользователь, заносит пользователя в базу
      *
      * @param update - данные о сообщении из класса TelegramBotUpdateListener
      */
+    @Nullable
     public PersonDog getPersonByChatId(Update update) {
 
         Long chatId = update.message().chat().id();
 
         if (personDogRepository.findByChatId(chatId) == null) {
-            PersonDog newPerson = new PersonDog();
+           PersonDog newPerson = new PersonDog();
 
             newPerson.setFirstName(update.message().chat().firstName());
             newPerson.setLastName(update.message().chat().lastName());
@@ -50,7 +52,6 @@ public class PersonDogService {
             personDogRepository.save(newPerson);
             return newPerson;
         }
-
 
         return null;
     }

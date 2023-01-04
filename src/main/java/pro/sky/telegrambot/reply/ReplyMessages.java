@@ -180,6 +180,7 @@ public final class ReplyMessages {
         return new SendMessage(update.message().replyToMessage().forwardFrom().id(), update.message().text());
     }
 
+
     public SendMessage photoRequest(Update update) {
         return new SendMessage(update.message().chat().id(), "Спасибо! Теперь направьте, пожалуйста, фотографию Вашего питомца, чтобы мы убедились, что с ним все хорошо!");
     }
