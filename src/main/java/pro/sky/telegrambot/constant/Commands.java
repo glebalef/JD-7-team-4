@@ -37,10 +37,13 @@ public enum Commands {
     BACK_TO_CHOOSE_SHELTER("назад к выбору приюта"),
     BACK_TO_INITIAL("назад к меню приюта"),
     BACK_TO_ADOPT("назад к инфо об усыновлении"),
-    BACK_TO_ADVICE("назад к рекомендациям");
+    BACK_TO_ADVICE("назад к рекомендациям"),
+    NOTHING("");
+
 
 
     final String message;
+
 
     Commands(String message) {
         this.message = message;

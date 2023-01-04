@@ -3,6 +3,7 @@ package pro.sky.telegrambot.service;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.exception.WrongPhoneNumberException;
 import pro.sky.telegrambot.model.PersonCat;
@@ -33,6 +34,7 @@ public class PersonCatService {
      *
      * @param update - данные о сообщении из класса TelegramBotUpdateListener
      */
+    @Nullable
     public PersonCat getPersonByChatId(Update update) {
 
         Long chatId = update.message().chat().id();
