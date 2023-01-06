@@ -131,10 +131,11 @@ public class TelegramBotUpdatesListenerTest {
     public void handle_DOG_SHELTER_Test() throws URISyntaxException, IOException {
         String json = Files.readString(Paths.get(TelegramBotUpdatesListenerTest.class.getResource("start_update.json").toURI()));
         Update update = getUpdate(json, "Приют для собак");
-        telegramBotUpdatesListener.process(Collections.singletonList(update));
+
         Mockito.when(contextRepository.findByChatId(123L)).thenReturn(context);
         Mockito.when(personDogService.getPersonByChatId(update)).thenReturn(personDogMock);
         Mockito.when(personDogRepository.findByChatId(123L)).thenReturn(personDogMock);
+        telegramBotUpdatesListener.process(Collections.singletonList(update));
 
 
 
