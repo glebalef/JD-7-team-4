@@ -1,4 +1,4 @@
-package pro.sky.telegrambot.testController;
+package pro.sky.telegrambot.controller;
 
 import com.pengrad.telegrambot.TelegramBot;
 import org.json.JSONObject;
@@ -12,11 +12,10 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import pro.sky.telegrambot.controller.PersonCatController;
-import pro.sky.telegrambot.model.PersonCat;
-import pro.sky.telegrambot.repository.CatsRepository;
-import pro.sky.telegrambot.repository.PersonCatRepository;
-import pro.sky.telegrambot.service.PersonCatService;
+import pro.sky.telegrambot.model.PersonDog;
+import pro.sky.telegrambot.repository.DogsRepository;
+import pro.sky.telegrambot.repository.PersonDogRepository;
+import pro.sky.telegrambot.service.PersonDogService;
 
 import java.util.Optional;
 
@@ -24,50 +23,50 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = PersonCatController.class)
-public class PersonCatControllerTest {
+@WebMvcTest(controllers = PersonDogController.class)
+public class PersonDogControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private PersonCatRepository personCatRepository;
+    private PersonDogRepository personDogRepository;
 
     @SpyBean
-    private PersonCatService personCatService;
+    private PersonDogService personDogService;
 
     @MockBean
     private TelegramBot telegramBot;
 
     @MockBean
-    private CatsRepository catsRepository;
+    private DogsRepository dogsRepository;
 
     @InjectMocks
-    private PersonCatController personCatController;
+    private PersonDogController personDogController;
 
     @Test
-    public void testPersonCat() throws Exception {
+    public void testPersonDog() throws Exception {
         final Long id = 1L;
         final Long chatId = 2L;
         final String firstName = "Evgeniy";
         final String lastName = "Onegin";
         final String phone = "88005553535";
-        PersonCat personCat = new PersonCat(chatId, firstName, lastName, phone);
-        personCat.setId(id);
+        PersonDog personDog = new PersonDog(chatId, firstName, lastName, phone);
+        personDog.setId(id);
 
-        JSONObject personCatObject = new JSONObject();
-        personCatObject.put("id", id);
-        personCatObject.put("chatId", chatId);
-        personCatObject.put("firstName", firstName);
-        personCatObject.put("lastName", lastName);
-        personCatObject.put("phone", phone);
+        JSONObject personDogObject = new JSONObject();
+        personDogObject.put("id", id);
+        personDogObject.put("chatId", chatId);
+        personDogObject.put("firstName", firstName);
+        personDogObject.put("lastName", lastName);
+        personDogObject.put("phone", phone);
 
-        Mockito.when(personCatRepository.save(any(PersonCat.class))).thenReturn(personCat);
-        Mockito.when(personCatRepository.findById(any(Long.class))).thenReturn(Optional.of(personCat));
+        Mockito.when(personDogRepository.save(any(PersonDog.class))).thenReturn(personDog);
+        Mockito.when(personDogRepository.findById(any(Long.class))).thenReturn(Optional.of(personDog));
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/personCat")
-                        .content(personCatObject.toString())
+                        .post("/personDog")
+                        .content(personDogObject.toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -78,8 +77,8 @@ public class PersonCatControllerTest {
                 .andExpect(jsonPath("$.phone").value(phone));
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .put("/personCat/" + id)
-                        .content(personCatObject.toString())
+                        .put("/personDog/" + id)
+                        .content(personDogObject.toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -90,7 +89,7 @@ public class PersonCatControllerTest {
                 .andExpect(jsonPath("$.phone").value(phone));
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/personCat/" + id)
+                        .get("/personDog/" + id)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id))
@@ -100,7 +99,7 @@ public class PersonCatControllerTest {
                 .andExpect(jsonPath("$.phone").value(phone));
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/personCat/" + id)
+                        .delete("/personDog/" + id)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }

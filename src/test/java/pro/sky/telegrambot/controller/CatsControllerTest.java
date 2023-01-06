@@ -1,4 +1,4 @@
-package pro.sky.telegrambot.testController;
+package pro.sky.telegrambot.controller;
 
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -11,10 +11,9 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import pro.sky.telegrambot.controller.DogsController;
-import pro.sky.telegrambot.model.Dog;
-import pro.sky.telegrambot.repository.DogsRepository;
-import pro.sky.telegrambot.service.DogsService;
+import pro.sky.telegrambot.model.Cat;
+import pro.sky.telegrambot.repository.CatsRepository;
+import pro.sky.telegrambot.service.CatsService;
 
 import java.util.Optional;
 
@@ -22,41 +21,40 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = DogsController.class)
-public class DogsControllerTest {
-
+@WebMvcTest(controllers = CatsController.class)
+public class CatsControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private DogsRepository dogsRepository;
+    private CatsRepository catsRepository;
 
     @SpyBean
-    private DogsService dogsService;
+    private CatsService catsService;
 
     @InjectMocks
-    private DogsController dogsController;
+    private CatsController catsController;
 
     @Test
-    public void testDogs() throws Exception {
+    public void testCats() throws Exception {
         final Long id = 1L;
-        final String name = "David";
-        final int age = 5;
-        final String breed = "labrador";
-        Dog dog = new Dog(id, name, age, breed);
+        final String name = "Charly";
+        final int age = 2;
+        final String breed = "Persian";
+        Cat cat = new Cat(id, name, age, breed);
 
-        JSONObject dogsObject = new JSONObject();
-        dogsObject.put("id", id);
-        dogsObject.put("name", name);
-        dogsObject.put("age", age);
-        dogsObject.put("breed", breed);
+        JSONObject catsObject = new JSONObject();
+        catsObject.put("id", id);
+        catsObject.put("name", name);
+        catsObject.put("age", age);
+        catsObject.put("breed", breed);
 
-        Mockito.when(dogsRepository.save(any(Dog.class))).thenReturn(dog);
-        Mockito.when(dogsRepository.findById(any(Long.class))).thenReturn(Optional.of(dog));
+        Mockito.when(catsRepository.save(any(Cat.class))).thenReturn(cat);
+        Mockito.when(catsRepository.findById(any(Long.class))).thenReturn(Optional.of(cat));
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/dog")
-                        .content(dogsObject.toString())
+                        .post("/cat")
+                        .content(catsObject.toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -66,8 +64,8 @@ public class DogsControllerTest {
                 .andExpect(jsonPath("$.breed").value(breed));
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .put("/dog/" + id)
-                        .content(dogsObject.toString())
+                        .put("/cat/" + id)
+                        .content(catsObject.toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -77,7 +75,7 @@ public class DogsControllerTest {
                 .andExpect(jsonPath("$.breed").value(breed));
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/dog/" + id)
+                        .get("/cat/" + id)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id))
@@ -86,9 +84,8 @@ public class DogsControllerTest {
                 .andExpect(jsonPath("$.breed").value(breed));
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/dog/" + id)
+                        .delete("/cat/" + id)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
-
 }
