@@ -41,11 +41,14 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     private final TelegramBot telegramBot;
 
     // Все сервис-классы, которые мы используем
-    Keyboards keyboards = new Keyboards();
-    ReplyMessages replyMessages = new ReplyMessages();
+    private final Keyboards keyboards = new Keyboards();
+    private final ReplyMessages replyMessages = new ReplyMessages();
     Context context;
-    Collection<DogReport> reports = new ArrayList<>();
-    Collection<CatReport> reportsCat = new ArrayList<>();
+    private final long dogVolunteerChatId = -1001634691308L;
+    private final long catVolunteerChatId = -1001865175202L;
+    private final long shelterBotChatId = 5713161862L;
+    private final Collection<DogReport> reports = new ArrayList<>();
+    private final Collection<CatReport> reportsCat = new ArrayList<>();
     private final PersonDogService personDogService;
     private final PersonDogRepository personDogRepository;
     private final DogReportRepository dogReportRepository;
@@ -352,43 +355,44 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         InlineKeyboardButton half = new InlineKeyboardButton("14 дней").callbackData("14 дней" + report1.getPersonDog().getChatId().toString());
                         InlineKeyboardButton full = new InlineKeyboardButton("30 дней").callbackData("30 дней" + report1.getPersonDog().getChatId().toString());
                         InlineKeyboardMarkup prolong = new InlineKeyboardMarkup(half, full);
-                        SendMessage prolongTrial = new SendMessage(-1001634691308L, "На какой период продлить испытательный срок для " + report1.getPersonDog().getFirstName() + " (id: " + report1.getPersonDog().getId() + ") ?");
+                        SendMessage prolongTrial = new SendMessage(dogVolunteerChatId, "На какой период продлить испытательный срок для " + report1.getPersonDog().getFirstName() + " (id: " + report1.getPersonDog().getId() + ") ?");
                         telegramBot.execute(prolongTrial.replyMarkup(prolong));
                     }
                     if (String.valueOf("завершить" + report1.getPersonDog().getChatId()).equals(data)) {
                         InlineKeyboardButton success = new InlineKeyboardButton("пройден").callbackData("пройден" + report1.getPersonDog().getChatId().toString());
                         InlineKeyboardButton fail = new InlineKeyboardButton("провален").callbackData("провален" + report1.getPersonDog().getChatId().toString());
                         InlineKeyboardMarkup finish = new InlineKeyboardMarkup(success, fail);
-                        SendMessage endTrial = new SendMessage(-1001634691308L, "Какой результат испытательного срока для" + report1.getPersonDog().getFirstName() + " (id: " + report1.getPersonDog().getId() + ") ?");
+                        SendMessage endTrial = new SendMessage(dogVolunteerChatId, "Какой результат испытательного срока для" + report1.getPersonDog().getFirstName() + " (id: " + report1.getPersonDog().getId() + ") ?");
                         telegramBot.execute(endTrial.replyMarkup(finish));
                     }
 
                     if (String.valueOf("14 дней" + report1.getPersonDog().getChatId()).equals(data)) {
-
                         Context context1 = contextRepository.findByChatId(report1.getPersonDog().getContext().getChatId());
                         context1.setAddDays("14");
                         contextRepository.save(context1);
                         SendMessage newHalfTrial = new SendMessage(report1.getPersonDog().getChatId(), "Мы вынуждены продлить ваш испытательный срок на 14 дней");
                         telegramBot.execute(newHalfTrial);
-                        SendMessage infoTrial = new SendMessage(-1001634691308L, "Испытательный период для " + report1.getPersonDog().getFirstName() + " (id: " + report1.getPersonDog().getId() + ") продлен на 14 дней");
+                        SendMessage infoTrial = new SendMessage(dogVolunteerChatId, "Испытательный период для " + report1.getPersonDog().getFirstName() + " (id: " + report1.getPersonDog().getId() + ") продлен на 14 дней");
                         telegramBot.execute(infoTrial);
                     }
+
                     if (String.valueOf("30 дней" + report1.getPersonDog().getChatId()).equals(data)) {
                         Context context1 = contextRepository.findByChatId(report1.getPersonDog().getContext().getChatId());
                         context1.setAddDays("30");
                         contextRepository.save(context1);
                         SendMessage newFullTrial = new SendMessage(report1.getPersonDog().getChatId(), "Мы вынуждены продлить ваш испытательный срок на 30 дней");
                         telegramBot.execute(newFullTrial);
-                        SendMessage infoTrial = new SendMessage(-1001634691308L, "Испытательный период для " + report1.getPersonDog().getFirstName() + " (id: " + report1.getPersonDog().getId() + ") продлен на 30 дней");
+                        SendMessage infoTrial = new SendMessage(dogVolunteerChatId, "Испытательный период для " + report1.getPersonDog().getFirstName() + " (id: " + report1.getPersonDog().getId() + ") продлен на 30 дней");
                         telegramBot.execute(infoTrial);
                     }
+
                     if (String.valueOf("пройден" + report1.getPersonDog().getChatId()).equals(data)) {
                         Context context1 = contextRepository.findByChatId(report1.getPersonDog().getContext().getChatId());
                         context1.setTestOff(true);
                         contextRepository.save(context1);
                         SendMessage successTrial = new SendMessage(report1.getPersonDog().getChatId(), "Поздравляем с успешным прохождением испытательного срока!");
                         telegramBot.execute(successTrial);
-                        SendMessage infoTrial = new SendMessage(-1001634691308L, "Усыновитель" + report1.getPersonDog().getFirstName() + " (id: " + report1.getPersonDog().getId() + ") уведомлен об успешном прохождении испытательного срока");
+                        SendMessage infoTrial = new SendMessage(dogVolunteerChatId, "Усыновитель" + report1.getPersonDog().getFirstName() + " (id: " + report1.getPersonDog().getId() + ") уведомлен об успешном прохождении испытательного срока");
                         telegramBot.execute(infoTrial);
                     }
                     if (String.valueOf("провален" + report1.getPersonDog().getChatId()).equals(data)) {
@@ -397,7 +401,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         contextRepository.save(context1);
                         SendMessage failedTrial = new SendMessage(report1.getPersonDog().getChatId(), "Сожалеем, но вы не прошли испытательный срок");
                         telegramBot.execute(failedTrial);
-                        SendMessage infoTrial = new SendMessage(-1001634691308L, "Усыновитель" + report1.getPersonDog().getFirstName() + " (id: " + report1.getPersonDog().getId() + ") уведомлен о неудачном прохождении испытательного срока");
+                        SendMessage infoTrial = new SendMessage(dogVolunteerChatId, "Усыновитель" + report1.getPersonDog().getFirstName() + " (id: " + report1.getPersonDog().getId() + ") уведомлен о неудачном прохождении испытательного срока");
                         telegramBot.execute(infoTrial);
                     }
                 }
@@ -411,50 +415,55 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         InlineKeyboardButton half = new InlineKeyboardButton("14 дней").callbackData("14 днейКот" + report1.getPersonCat().getChatId().toString());
                         InlineKeyboardButton full = new InlineKeyboardButton("30 дней").callbackData("30 днейКот" + report1.getPersonCat().getChatId().toString());
                         InlineKeyboardMarkup prolong = new InlineKeyboardMarkup(half, full);
-                        SendMessage prolongTrial = new SendMessage(-1001865175202L, "На какой период продлить испытательный срокдля" + report1.getPersonCat().getFirstName() + " (id: " + report1.getPersonCat().getId() + ") ?");
+                        SendMessage prolongTrial = new SendMessage(catVolunteerChatId, "На какой период продлить испытательный срокдля" + report1.getPersonCat().getFirstName() + " (id: " + report1.getPersonCat().getId() + ") ?");
                         telegramBot.execute(prolongTrial.replyMarkup(prolong));
                     }
+
                     if (String.valueOf("завершитьКот" + report1.getPersonCat().getChatId()).equals(data)) {
                         InlineKeyboardButton success = new InlineKeyboardButton("пройден").callbackData("пройденКот" + report1.getPersonCat().getChatId().toString());
                         InlineKeyboardButton fail = new InlineKeyboardButton("провален").callbackData("проваленКот" + report1.getPersonCat().getChatId().toString());
                         InlineKeyboardMarkup finish = new InlineKeyboardMarkup(success, fail);
-                        SendMessage endTrial = new SendMessage(-1001865175202L, "Какой результат испытательного срока для" + report1.getPersonCat().getFirstName() + " (id: " + report1.getPersonCat().getId() + ") ?");
+                        SendMessage endTrial = new SendMessage(catVolunteerChatId, "Какой результат испытательного срока для" + report1.getPersonCat().getFirstName() + " (id: " + report1.getPersonCat().getId() + ") ?");
                         telegramBot.execute(endTrial.replyMarkup(finish));
                     }
+
                     if (String.valueOf("14 днейКот" + report1.getPersonCat().getChatId()).equals(data)) {
                         Context context1 = contextRepository.findByChatId(report1.getPersonCat().getContext().getChatId());
                         context1.setAddDays("14");
                         contextRepository.save(context1);
                         SendMessage newHalfTrial = new SendMessage(report1.getPersonCat().getChatId(), "Мы вынуждены продлить ваш испытательный срок на 14 дней");
                         telegramBot.execute(newHalfTrial);
-                        SendMessage infoTrial = new SendMessage(-1001865175202L, "Испытательный период для " + report1.getPersonCat().getFirstName() + " (id: " + report1.getPersonCat().getId() + ") продлен на 14 дней");
+                        SendMessage infoTrial = new SendMessage(catVolunteerChatId, "Испытательный период для " + report1.getPersonCat().getFirstName() + " (id: " + report1.getPersonCat().getId() + ") продлен на 14 дней");
                         telegramBot.execute(infoTrial);
                     }
+
                     if (String.valueOf("30 днейКот" + report1.getPersonCat().getChatId()).equals(data)) {
                         Context context1 = contextRepository.findByChatId(report1.getPersonCat().getContext().getChatId());
                         context1.setAddDays("30");
                         contextRepository.save(context1);
                         SendMessage newFullTrial = new SendMessage(report1.getPersonCat().getChatId(), "Мы вынуждены продлить ваш испытательный срок на 30 дней");
                         telegramBot.execute(newFullTrial);
-                        SendMessage infoTrial = new SendMessage(-1001865175202L, "Испытательный период для " + report1.getPersonCat().getFirstName() + " (id: " + report1.getPersonCat().getId() + ") продлен на 30 дней");
+                        SendMessage infoTrial = new SendMessage(catVolunteerChatId, "Испытательный период для " + report1.getPersonCat().getFirstName() + " (id: " + report1.getPersonCat().getId() + ") продлен на 30 дней");
                         telegramBot.execute(infoTrial);
                     }
+
                     if (String.valueOf("пройденКот" + report1.getPersonCat().getChatId()).equals(data)) {
                         Context context1 = contextRepository.findByChatId(report1.getPersonCat().getContext().getChatId());
                         context1.setTestOff(true);
                         contextRepository.save(context1);
                         SendMessage successTrial = new SendMessage(report1.getPersonCat().getChatId(), "Поздравляем с успешным прохождением испытательного срока!");
                         telegramBot.execute(successTrial);
-                        SendMessage infoTrial = new SendMessage(-1001865175202L, "Усыновитель" + report1.getPersonCat().getFirstName() + " (id: " + report1.getPersonCat().getId() + ") уведомлен об успешном прохождении испытательного срока");
+                        SendMessage infoTrial = new SendMessage(catVolunteerChatId, "Усыновитель" + report1.getPersonCat().getFirstName() + " (id: " + report1.getPersonCat().getId() + ") уведомлен об успешном прохождении испытательного срока");
                         telegramBot.execute(infoTrial);
                     }
+
                     if (String.valueOf("проваленКот" + report1.getPersonCat().getChatId()).equals(data)) {
                         Context context1 = contextRepository.findByChatId(report1.getPersonCat().getContext().getChatId());
                         context1.setTestOff(true);
                         contextRepository.save(context1);
                         SendMessage failedTrial = new SendMessage(report1.getPersonCat().getChatId(), "Сожалеем, но вы не прошли испытательный срок");
                         telegramBot.execute(failedTrial);
-                        SendMessage infoTrial = new SendMessage(-1001865175202L, "Усыновитель" + report1.getPersonCat().getFirstName() + " (id: " + report1.getPersonCat().getId() + ") уведомлен о неудачном прохождении испытательного срока");
+                        SendMessage infoTrial = new SendMessage(catVolunteerChatId, "Усыновитель" + report1.getPersonCat().getFirstName() + " (id: " + report1.getPersonCat().getId() + ") уведомлен о неудачном прохождении испытательного срока");
                         telegramBot.execute(infoTrial);
                     }
                 }
@@ -466,15 +475,16 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 if ("плохоCat".equals(update.callbackQuery().data())) {
                     PersonCat personCat = personCatRepository.findByChatId(update.callbackQuery().from().id());
                     telegramBot.execute(replyMessages.badReportReply(update));
-                    SendMessage badReportReply = new SendMessage(-1001865175202L, "Усыновитель" + personCat.getFirstName()
+                    SendMessage badReportReply = new SendMessage(catVolunteerChatId, "Усыновитель" + personCat.getFirstName()
                             + " (id: " + personCat.getId() + ") уведомлен о плохо заполненном отчете");
                     telegramBot.execute(badReportReply);
                 }
+
                 //Уведомление усыновителя собаки о плохо заполненном отчете
                 if ("плохо".equals(update.callbackQuery().data())) {
                     PersonDog personDog = personDogRepository.findByChatId(update.callbackQuery().from().id());
                     telegramBot.execute(replyMessages.badReportReply(update));
-                    SendMessage badReportNotification = new SendMessage(-1001634691308L, "Усыновитель" + personDog.getFirstName()
+                    SendMessage badReportNotification = new SendMessage(dogVolunteerChatId, "Усыновитель" + personDog.getFirstName()
                             + " (id: " + personDog.getId() + ") уведомлен о плохо заполненном отчете");
                     telegramBot.execute(badReportNotification);
                 }
@@ -491,7 +501,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         personCatService.phoneNumberAdd(update);
                     }
                     //ответ пользователя волонтеру в чат волонтеров
-                    if (Objects.equals(update.message().replyToMessage().from().id(), 5713161862L)
+                    if (Objects.equals(update.message().replyToMessage().from().id(), shelterBotChatId)
                             && !update.message().replyToMessage().text().contains("номер телефона")
                             && !update.message().replyToMessage().text().contains("отчет")
                             && !update.message().replyToMessage().text().contains("Вы кормите")
@@ -573,16 +583,16 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                             dogReport3.setFileId(update.message().photo()[0].fileId());
                             dogReportRepository.save(dogReport3);
                             telegramBot.execute(replyMessages.reportIsSaved(update).replyMarkup(keyboards.getInitialKeyboard()));
-                            telegramBot.execute(new SendMessage(-1001634691308L, "Получен новый отчет:" + dogReport3.toString()));
-                            telegramBot.execute(new SendPhoto(-1001634691308L, dogReport3.getFileId()).replyMarkup(keyboards.getBadReport()));
+                            telegramBot.execute(new SendMessage(dogVolunteerChatId, "Получен новый отчет:" + dogReport3.toString()));
+                            telegramBot.execute(new SendPhoto(dogVolunteerChatId, dogReport3.getFileId()).replyMarkup(keyboards.getBadReport()));
 
                         } else if (context.getType().equals("cat")) {
                             CatReport catReport3 = catReportRepository.findCatReportByFileIdAndPersonCatId(null, personCatRepository.findByChatId(update.message().chat().id()).getId());
                             catReport3.setFileId(update.message().photo()[0].fileId());
                             catReportRepository.save(catReport3);
                             telegramBot.execute(replyMessages.reportIsSaved(update).replyMarkup(keyboards.getInitialKeyboard()));
-                            telegramBot.execute(new SendMessage(-1001865175202L, "Получен новый отчет:" + catReport3.toString()));
-                            telegramBot.execute(new SendPhoto(-1001865175202L, catReport3.getFileId()).replyMarkup(keyboards.getBadReportCat()));
+                            telegramBot.execute(new SendMessage(catVolunteerChatId, "Получен новый отчет:" + catReport3.toString()));
+                            telegramBot.execute(new SendPhoto(catVolunteerChatId, catReport3.getFileId()).replyMarkup(keyboards.getBadReportCat()));
                         }
                         break;
                 }
@@ -593,25 +603,28 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
 
-    @Scheduled(cron = "0 0/1 * * * *")
+    @Scheduled(cron = "0 0 21 * * *")
     public void sendNotificationDog() {
         logger.info("Поиск отчетов из приюта для собак");
 
         for (DogReport dogReport : schedulerService.findNewDogReports()) {
+            //для проверки состояния испытательного срока (ИС): true = в процессе ИС, false = ИС не проводится.
             boolean testOff = dogReport.getPersonDog().getContext().getTestOff();
+            //chatId отправителя отчета
             Long personDogId = dogReport.getPersonDog().getId();
+            //количество дней с последнего полученного отчета
             long daysBetween = DAYS.between(LocalDate.now(), dogReport.getReportDate());
 
+            //уведомление в чат волонтеров приюта для собак о том, что отчет не поступал 2 или более дней
             if (dogReport.getReportDate().isBefore(LocalDate.now().minusDays(1))
                     && !testOff) {
-
-                SendMessage sendMessage = new SendMessage(-1001634691308L, "Отчет о собаке "
+                SendMessage sendMessage = new SendMessage(dogVolunteerChatId, "Отчет о собаке "
                         + dogReport.getPersonDog().getDog().getName() + " (id: " + dogReport.getPersonDog().getDog().getId() + ") от усыновителя "
                         + dogReport.getPersonDog().getFirstName() + " (id: " + personDogId + ") не поступал уже " + daysBetween + " дней. "
                         + "Дата последнего отчета: " + dogReport.getReportDate());
                 telegramBot.execute(sendMessage);
-
             }
+            //напоминание пользователю о необходимости отправить отчет за текущий день
             if (dogReport.getReportDate().equals(LocalDate.now().minusDays(1))
                     && !testOff) {
                 SendMessage sendToPerson = new SendMessage(dogReport.getPersonDog().getChatId(), "Дорогой усыновитель, " +
@@ -619,109 +632,112 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 telegramBot.execute(sendToPerson);
             }
         }
+
         for (DogReport dogReport : schedulerService.findOldDogReports()) {
+            //для проверки состояния испытательного срока (ИС): true = в процессе ИС, false = ИС не проводится
             boolean testOff = dogReport.getPersonDog().getContext().getTestOff();
+            //chatId отправителя отчета
             Long personDogId = dogReport.getPersonDog().getId();
+            //количество дней в случае назначения дополнительного испытательного срока
             String addDays = dogReport.getPersonDog().getContext().getAddDays();
+            //кнопки выбора результата испытательного срока в случае прохождения необходимого количества дней
+            InlineKeyboardButton success = new InlineKeyboardButton("пройден").callbackData("пройден" + dogReport.getPersonDog().getChatId().toString());
+            InlineKeyboardButton fail = new InlineKeyboardButton("провален").callbackData("провален" + dogReport.getPersonDog().getChatId().toString());
+            InlineKeyboardMarkup decisionTestPeriod = new InlineKeyboardMarkup(success, fail);
+
+            //выбор результата прохождения основного испытательного срока в 30 дней
             if (dogReport.getReportDate().equals(LocalDate.now().minusDays(30))) {
-
                 reports.add(dogReport);
-
-                SendMessage sendMessage = new SendMessage(-1001634691308L, "Испытательный срок в 30 дней у "
+                SendMessage sendMessage = new SendMessage(dogVolunteerChatId, "Испытательный срок в 30 дней у "
                         + dogReport.getPersonDog().getFirstName() + " (id: " + personDogId + ") для собаки "
                         + dogReport.getPersonDog().getDog().getName() + " (id: " + dogReport.getPersonDog().getDog().getId() + ") закончен");
                 InlineKeyboardButton more = new InlineKeyboardButton("продлить").callbackData("продлить" + dogReport.getPersonDog().getChatId().toString());
                 InlineKeyboardButton enough = new InlineKeyboardButton("завершить").callbackData("завершить" + dogReport.getPersonDog().getChatId().toString());
                 InlineKeyboardMarkup decision = new InlineKeyboardMarkup(more, enough);
-
                 telegramBot.execute(sendMessage.replyMarkup(decision));
             }
 
+            //выбор результата прохождения дополнительного испытательного срока в 14 дней
             if (dogReport.getReportDate().equals(LocalDate.now().minusDays(44))
                     && !testOff && addDays.equals("14")) {
                 reports.add(dogReport);
-                SendMessage halfBigTrial = new SendMessage(-1001634691308L, "Дополнительный испытательный срок в 14 дней у " + dogReport.getPersonDog().getFirstName() + " (id: " + dogReport.getPersonDog().getId()
+                SendMessage halfBigTrial = new SendMessage(dogVolunteerChatId, "Дополнительный испытательный срок в 14 дней у " + dogReport.getPersonDog().getFirstName() + " (id: " + dogReport.getPersonDog().getId()
                         + ") для собаки " + dogReport.getPersonDog().getDog().getName() + " (id: " + dogReport.getPersonDog().getDog().getId() + ") закончен. Какой результат?");
-                InlineKeyboardButton success = new InlineKeyboardButton("пройден").callbackData("пройден" + dogReport.getPersonDog().getChatId().toString());
-                InlineKeyboardButton fail = new InlineKeyboardButton("провален").callbackData("провален" + dogReport.getPersonDog().getChatId().toString());
-                InlineKeyboardMarkup decisionTestPeriod = new InlineKeyboardMarkup(success, fail);
-
                 telegramBot.execute(halfBigTrial.replyMarkup(decisionTestPeriod));
             }
-
+            //выбор результата прохождения дополнительного испытательного срока в 30 дней
             if (dogReport.getReportDate().equals(LocalDate.now().minusDays(60)) && !testOff) {
                 reports.add(dogReport);
-                SendMessage bigTrial = new SendMessage(-1001634691308L, "Дополнительный испытательный срок в 30 дней у "
+                SendMessage bigTrial = new SendMessage(dogVolunteerChatId, "Дополнительный испытательный срок в 30 дней у "
                         + dogReport.getPersonDog().getFirstName() + " (id: " + personDogId
                         + ") для собаки " + dogReport.getPersonDog().getDog().getName() + " (id: " + dogReport.getPersonDog().getDog().getId() + ") закончен. Какой результат?");
-                InlineKeyboardButton success = new InlineKeyboardButton("пройден").callbackData("пройден" + dogReport.getPersonDog().getChatId().toString());
-                InlineKeyboardButton fail = new InlineKeyboardButton("провален").callbackData("провален" + dogReport.getPersonDog().getChatId().toString());
-                InlineKeyboardMarkup decisionTestPeriod = new InlineKeyboardMarkup(success, fail);
-
                 telegramBot.execute(bigTrial.replyMarkup(decisionTestPeriod));
             }
         }
     }
 
-    @Scheduled(cron = "0 0/1 * * * *")
+    @Scheduled(cron = "0 0 21 * * *")
     public void sendNotificationCat() {
         logger.info("Поиск отчетов из приюта для кошек");
 
         for (CatReport catReport : schedulerService.findNewCatReports()) {
+            //для проверки состояния испытательного срока (ИС): true = в процессе ИС, false = ИС не проводится
             boolean testOff = catReport.getPersonCat().getContext().getTestOff();
+            //chatId отправителя отчета
             Long personCatId = catReport.getPersonCat().getId();
+            //количество дней с последнего полученного отчета
             long daysBetween = DAYS.between(LocalDate.now(), catReport.getReportDate());
 
+            //уведомление в чат волонтеров приюта для кошек о том, что отчет не поступал 2 или более дней
             if (catReport.getReportDate().isBefore(LocalDate.now().minusDays(1)) && !testOff) {
-
-                SendMessage sendMessage = new SendMessage(-1001865175202L, "Отчет о кошке " + catReport.getPersonCat().getCat().getName()
+                SendMessage sendMessage = new SendMessage(catVolunteerChatId, "Отчет о кошке " + catReport.getPersonCat().getCat().getName()
                         + " (id: " + catReport.getPersonCat().getCat().getId() + ") от усыновителя "
                         + catReport.getPersonCat().getFirstName() + " (id: " + personCatId + ") не поступал уже " + daysBetween + " дней. " + "Дата последнего отчета: " + catReport.getReportDate());
                 telegramBot.execute(sendMessage);
-
             }
+
+            //напоминание пользователю о необходимости отправить отчет за текущий день
             if (catReport.getReportDate().equals(LocalDate.now().minusDays(1)) && !testOff) {
                 SendMessage sendToPerson = new SendMessage(catReport.getPersonCat().getChatId(), "Дорогой усыновитель, " + "не забудь сегодня отправить отчет");
                 telegramBot.execute(sendToPerson);
             }
         }
+
         for (CatReport catReport : schedulerService.findOldCatReports()) {
+            //для проверки состояния испытательного срока (ИС): true = в процессе ИС, false = ИС не проводится
             boolean testOff = catReport.getPersonCat().getContext().getTestOff();
+            //chatId отправителя отчета
             Long personCatId = catReport.getPersonCat().getId();
+            //количество дней в случае назначения дополнительного испытательного срока
             String addDays = catReport.getPersonCat().getContext().getAddDays();
+            //кнопки выбора результата испытательного срока в случае прохождения необходимого количества дней
+            InlineKeyboardButton success = new InlineKeyboardButton("пройден").callbackData(String.valueOf("пройденКот" + catReport.getPersonCat().getChatId()));
+            InlineKeyboardButton fail = new InlineKeyboardButton("провален").callbackData(String.valueOf("проваленКот" + catReport.getPersonCat().getChatId()));
+            InlineKeyboardMarkup decisionTestPeriod = new InlineKeyboardMarkup(success, fail);
+
+            //выбор результата прохождения основного испытательного срока в 30 дней
             if (catReport.getReportDate().equals(LocalDate.now().minusDays(30))) {
-
                 reportsCat.add(catReport);
-
-                SendMessage sendMessage = new SendMessage(-1001865175202L, "Испытательный срок в 30 дней у " + catReport.getPersonCat().getFirstName() + " (id: " + personCatId + ") для кошки " + catReport.getPersonCat().getCat().getName() + " (id: " + catReport.getPersonCat().getCat().getId() + ") закончен");
+                SendMessage sendMessage = new SendMessage(catVolunteerChatId, "Испытательный срок в 30 дней у " + catReport.getPersonCat().getFirstName() + " (id: " + personCatId + ") для кошки " + catReport.getPersonCat().getCat().getName() + " (id: " + catReport.getPersonCat().getCat().getId() + ") закончен");
                 InlineKeyboardButton more = new InlineKeyboardButton("продлить").callbackData("продлитьКот" + catReport.getPersonCat().getChatId().toString());
                 InlineKeyboardButton enough = new InlineKeyboardButton("завершить").callbackData("завершитьКот" + catReport.getPersonCat().getChatId().toString());
                 InlineKeyboardMarkup decision = new InlineKeyboardMarkup(more, enough);
-
                 telegramBot.execute(sendMessage.replyMarkup(decision));
             }
 
-
+            //выбор результата прохождения дополнительного испытательного срока в 14 дней
             if (catReport.getReportDate().equals(LocalDate.now().minusDays(44)) && !testOff && addDays.equals("14")) {
                 reportsCat.add(catReport);
-                SendMessage halfBigTrial = new SendMessage(-1001865175202L, "Дополнительный испытательный срок в 14 дней у " + catReport.getPersonCat().getFirstName() + " (id: " + catReport.getPersonCat().getId() + ") для кошки " + catReport.getPersonCat().getCat().getName() + " (id: " + catReport.getPersonCat().getCat().getId() + ") закончен. Какой результат?");
-                InlineKeyboardButton success = new InlineKeyboardButton("пройден").callbackData(String.valueOf("пройденКот" + catReport.getPersonCat().getChatId()));
-                InlineKeyboardButton fail = new InlineKeyboardButton("провален").callbackData(String.valueOf("проваленКот" + catReport.getPersonCat().getChatId()));
-                InlineKeyboardMarkup decisionTestPeriod = new InlineKeyboardMarkup(success, fail);
-
+                SendMessage halfBigTrial = new SendMessage(catVolunteerChatId, "Дополнительный испытательный срок в 14 дней у " + catReport.getPersonCat().getFirstName() + " (id: " + catReport.getPersonCat().getId() + ") для кошки " + catReport.getPersonCat().getCat().getName() + " (id: " + catReport.getPersonCat().getCat().getId() + ") закончен. Какой результат?");
                 telegramBot.execute(halfBigTrial.replyMarkup(decisionTestPeriod));
             }
 
+            //выбор результата прохождения дополнительного испытательного срока в 30 дней
             if (catReport.getReportDate().equals(LocalDate.now().minusDays(60)) && !testOff) {
                 reportsCat.add(catReport);
-                SendMessage bigTrial = new SendMessage(-1001865175202L, "Дополнительный испытательный срок в 30 дней у " + catReport.getPersonCat().getFirstName() + " (id: " + personCatId + ") для кошки " + catReport.getPersonCat().getCat().getName() + " (id: " + catReport.getPersonCat().getCat().getId() + ") закончен. Какой результат?");
-                InlineKeyboardButton success = new InlineKeyboardButton("пройден").callbackData("пройденКот" + catReport.getPersonCat().getChatId().toString());
-                InlineKeyboardButton fail = new InlineKeyboardButton("провален").callbackData("проваленКот" + catReport.getPersonCat().getChatId().toString());
-                InlineKeyboardMarkup decisionTestPeriod = new InlineKeyboardMarkup(success, fail);
-
+                SendMessage bigTrial = new SendMessage(catVolunteerChatId, "Дополнительный испытательный срок в 30 дней у " + catReport.getPersonCat().getFirstName() + " (id: " + personCatId + ") для кошки " + catReport.getPersonCat().getCat().getName() + " (id: " + catReport.getPersonCat().getCat().getId() + ") закончен. Какой результат?");
                 telegramBot.execute(bigTrial.replyMarkup(decisionTestPeriod));
             }
-
         }
     }
 }

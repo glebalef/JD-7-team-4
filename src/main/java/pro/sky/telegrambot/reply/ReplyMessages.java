@@ -200,4 +200,5 @@ public final class ReplyMessages {
     public SendMessage persistentPhotoRequest(Update update) {
         return new SendMessage(update.message().chat().id(), "Пожалуйста, направьте, фото! Нам надо взглянуть на Вашего зверька.");
     }
+
 }
