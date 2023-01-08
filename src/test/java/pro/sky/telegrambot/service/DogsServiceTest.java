@@ -1,7 +1,5 @@
 package pro.sky.telegrambot.service;
 
-import liquibase.pro.packaged.A;
-import net.bytebuddy.dynamic.DynamicType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +12,9 @@ import pro.sky.telegrambot.repository.DogsRepository;
 
 import java.util.Optional;
 
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 @ExtendWith(MockitoExtension.class)
 public class DogsServiceTest {
 
@@ -22,7 +23,7 @@ public class DogsServiceTest {
 
     @InjectMocks
     DogsService out;
-    Dog testDog = new Dog(1L, "Бобик",2, "дворняга");
+    Dog testDog = new Dog(1L, "Бобик", 2, "дворняга");
     Dog editedDog = new Dog(1L, "Шарик", 7, "овчарка");
     Long id = 1L;
     String name = "Бобик";
@@ -34,17 +35,17 @@ public class DogsServiceTest {
 
         Mockito.when(dogsRepository.findById(1L)).thenReturn(Optional.ofNullable(testDog));
         Mockito.when(dogsRepository.save(testDog)).thenReturn(testDog);
-        Dog newDog = new Dog(id,name,age,breed);
+        Dog newDog = new Dog(id, name, age, breed);
 
         Dog resultDog = out.getDog(1L);
         Dog resultDog2 = out.getDog(2L);
         Dog resultDog3 = out.addDog(testDog);
 
-        Assertions.assertEquals(testDog,resultDog);
+        Assertions.assertEquals(testDog, resultDog);
         Assertions.assertNull(resultDog2);
-        Assertions.assertEquals(testDog.getName(),newDog.getName());
-        Assertions.assertEquals(testDog.getAge(),newDog.getAge());
-        Assertions.assertEquals(testDog.getBreed(),newDog.getBreed());
+        Assertions.assertEquals(testDog.getName(), newDog.getName());
+        Assertions.assertEquals(testDog.getAge(), newDog.getAge());
+        Assertions.assertEquals(testDog.getBreed(), newDog.getBreed());
     }
 
     @Test
@@ -60,6 +61,13 @@ public class DogsServiceTest {
         Assertions.assertEquals(result.getBreed(), editedDog.getBreed());
         Assertions.assertEquals(result.getAge(), editedDog.getAge());
         Assertions.assertEquals(result.getAge(), 7);
+
+    }
+
+    @Test
+    void shouldDeleteDog() {
+        out.deleteDog(1L);
+        verify(dogsRepository, times(1)).deleteById(1L);
 
     }
 }
