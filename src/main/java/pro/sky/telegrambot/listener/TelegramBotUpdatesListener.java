@@ -325,8 +325,8 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                             telegramBot.execute(replyMessages.photoRequest(update).replyMarkup(keyboards.getAutoReply()));
                         }
                         break;
-                    case NEW_HABITS_NEGATIVE:
 
+                    case NEW_HABITS_NEGATIVE:
                         if (context.getType().equals("dog")) {
                             DogReport dogReport4 = dogReportRepository.findDogReportByFileIdAndPersonDogId(null, personDogRepository.findByChatId(update.message().chat().id()).getId());
                             dogReport4.setNewHabitsAppear(Boolean.FALSE);
@@ -603,7 +603,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
 
-    @Scheduled(cron = "0 0 21 * * *")
+    @Scheduled(cron = "0 0/3 * * * *")
     public void sendNotificationDog() {
         logger.info("Поиск отчетов из приюта для собак");
 
@@ -676,7 +676,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
         }
     }
 
-    @Scheduled(cron = "0 0 21 * * *")
+    @Scheduled(cron = "0 0/3 * * * *")
     public void sendNotificationCat() {
         logger.info("Поиск отчетов из приюта для кошек");
 
